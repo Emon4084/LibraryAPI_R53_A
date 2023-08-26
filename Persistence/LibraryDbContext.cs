@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using LibraryAPI_R53_A.Core.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using R53_Group_A.Models;
 
-namespace R53_Group_A.DAL
+namespace LibraryAPI_R53_A.Persistence
 {
-    public class LibraryDbContext:IdentityDbContext
+    public class LibraryDbContext : IdentityDbContext
     {
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options)
         {
@@ -41,10 +41,10 @@ namespace R53_Group_A.DAL
                 entity.Property(e => e.Email).IsRequired(false);
                 entity.Property(e => e.Phone).IsRequired(false);
                 entity.Property(e => e.IsActive).IsRequired(false);
-                
+
             });
 
-           
+
 
             //Book Entity Relation
             modelBuilder.Entity<Book>().HasOne(p => p.Publisher).WithMany().HasForeignKey(p => p.PublisherId).OnDelete(DeleteBehavior.Restrict);

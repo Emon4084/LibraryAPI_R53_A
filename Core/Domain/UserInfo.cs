@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace R53_Group_A.Models
+namespace LibraryAPI_R53_A.Core.Domain
 {
-    public class UserInfo:IdentityUser
+    public class UserInfo : IdentityUser
     {
         public string? RoleId { get; set; }
         public IdentityRole? Role { get; set; }

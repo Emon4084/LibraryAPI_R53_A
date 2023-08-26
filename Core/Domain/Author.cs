@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace R53_Group_A.Models
+namespace LibraryAPI_R53_A.Core.Domain
 {
     public class Author
     {
@@ -16,6 +16,6 @@ namespace R53_Group_A.Models
         public bool? IsActive { get; set; }
         //public virtual ICollection<BookAuthor> BookAuthor { get; set; }
         //public virtual ICollection<UserPreference> UserPreference { get; set; }
-        
+
     }
 }

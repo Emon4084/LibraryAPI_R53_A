@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace R53_Group_A.Models
+namespace LibraryAPI_R53_A.Core.Domain
 {
     public class Book
     {
@@ -17,12 +17,12 @@ namespace R53_Group_A.Models
         public int? TotalCopies { get; set; }
         public string? Language { get; set; }
         public string? Description { get; set; }
+        public decimal? BookPrice { get; set; }
         [NotMapped]
-        public decimal BookPrice { get; set; }
         public decimal? RentPrice { get; set; }
         public string? DDCCode { get; set; }
         public bool IsActive { get; set; }
-        [NotMapped] 
+        [NotMapped]
         public IFormFile? Cover { get; set; }
         public bool IsDigital { get; set; }
         [NotMapped]
@@ -34,7 +34,7 @@ namespace R53_Group_A.Models
         public Category? Category { get; set; }
 
         //public ICollection<BookAuthor>? BookAuthor { get; set; }
-        
+
         public List<BookCopy> Copies { get; set; } = new List<BookCopy>();
 
         //public virtual ICollection<BookReview>? BookReviews { get; set; }
