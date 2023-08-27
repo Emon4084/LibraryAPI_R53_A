@@ -2,14 +2,14 @@
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
-namespace R53_Group_A.Models
+namespace LibraryAPI_R53_A.Core.Domain
 {
     public class BorrowedBook
     {
         [Key]
         public int BorrowedBookId { get; set; }
         public string? UserId { get; set; }
-        public UserInfo? UserInfo { get; set; }
+        public ApplicationUser? UserInfo { get; set; }
         public int? BookId { get; set; }
         public Book? Book { get; set; }
         public int BookCopyId { get; set; }
@@ -20,8 +20,8 @@ namespace R53_Group_A.Models
         public bool IsReturned { get; set; }
         public bool IsActive { get; set; }
         public DateTime? ActualReturnDate { get; set; }
-        //public System.Collections.Generic.ICollection<Inspection>? Inspection { get; set; }
-        //public System.Collections.Generic.ICollection<Fine>? Fine { get; set; }
+        public ICollection<Inspection>? Inspection { get; set; }
+        public ICollection<Fine>? Fine { get; set; }
 
 
     }

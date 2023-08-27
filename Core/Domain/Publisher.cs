@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace R53_Group_A.Models
+namespace LibraryAPI_R53_A.Core.Domain
 {
     public class Publisher
     {
@@ -11,6 +12,7 @@ namespace R53_Group_A.Models
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public bool IsActive { get; set; }
-        //public ICollection<Book>? Books { get; set; }
+        [JsonIgnore]
+        public ICollection<Book>? Books { get; set; }
     }
 }

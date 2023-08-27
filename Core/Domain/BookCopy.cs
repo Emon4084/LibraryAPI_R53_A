@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
-namespace R53_Group_A.Models
+namespace LibraryAPI_R53_A.Core.Domain
 {
     public enum BookCondition
     {
@@ -20,7 +21,9 @@ namespace R53_Group_A.Models
         public Book? Book { get; set; }
         public int ShelfId { get; set; }
         public Shelf? Shelf { get; set; }
-
-        //public virtual ICollection<BorrowedBook>? BorrowBook { get; set; }
+        [JsonIgnore]
+        public ICollection<BorrowedBook>? BorrowBook { get; set; }
+        [JsonIgnore]
+        public ICollection<Inspection>? Inspections { get; set; }
     }
 }
