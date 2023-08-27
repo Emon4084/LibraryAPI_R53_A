@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
     public class Author
     {
-        public int AuthorID { get; set; }
+        public int AuthorId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -14,8 +15,10 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public bool? IsActive { get; set; }
-        //public virtual ICollection<BookAuthor> BookAuthor { get; set; }
-        //public virtual ICollection<UserPreference> UserPreference { get; set; }
+        [JsonIgnore]
+        public  ICollection<BookAuthor>? BookAuthor { get; set; }
+        [JsonIgnore]
+        public ICollection<UserPreference>? UserPreference { get; set; }
 
     }
 }

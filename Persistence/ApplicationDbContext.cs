@@ -4,9 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI_R53_A.Persistence
 {
-    public class LibraryDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options)
+        public ApplicationDbContext()
+        {
+            
+        }
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -25,7 +29,7 @@ namespace LibraryAPI_R53_A.Persistence
         public DbSet<Subcategory> Subcategories { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
-        public DbSet<UserInfo> UserInfos { get; set; }
+        //public DbSet<ApplicationUser> UserInfos { get; set; }
         public DbSet<UserPreference> UserPreferences { get; set; }
         public DbSet<BookWishlist> BookWishlists { get; set; }
 
@@ -33,15 +37,8 @@ namespace LibraryAPI_R53_A.Persistence
         {
             modelBuilder.Entity<Author>(entity =>
             {
-                entity.HasKey(e => e.AuthorID);
-                entity.Property(e => e.FirstName).IsRequired();
-                entity.Property(e => e.LastName).IsRequired();
-                entity.Property(e => e.BirthDate).IsRequired();
-                entity.Property(e => e.Biography).IsRequired(false);
-                entity.Property(e => e.Email).IsRequired(false);
-                entity.Property(e => e.Phone).IsRequired(false);
-                entity.Property(e => e.IsActive).IsRequired(false);
-
+                entity.HasKey(e => e.AuthorId);
+                entity.Property(e => e.AuthorId).IsRequired();
             });
 
 
@@ -56,11 +53,11 @@ namespace LibraryAPI_R53_A.Persistence
             {
                 entity.HasKey(e => new { e.BookId, e.AuthorId });
                 entity.HasOne(e => e.Book)
-                 .WithMany()
+                 .WithMany(e => e.BookAuthor)
                  .HasForeignKey(e => e.BookId).OnDelete(DeleteBehavior.Restrict); ;
 
                 entity.HasOne(e => e.Author)
-                    .WithMany()
+                    .WithMany(e=>e.BookAuthor)
                     .HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -98,8 +95,8 @@ namespace LibraryAPI_R53_A.Persistence
             modelBuilder.Entity<Subcategory>().HasOne(p => p.Category).WithMany().HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
 
             //UserInfo
-            modelBuilder.Entity<UserInfo>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<UserInfo>().HasOne(p => p.SubscriptionPlan).WithMany().HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany().HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
 
             //UserPreference
             modelBuilder.Entity<UserPreference>().HasOne(p => p.UserInfo).WithMany().HasForeignKey(p => p.UserInfoId).OnDelete(DeleteBehavior.Restrict);

@@ -5,7 +5,7 @@
         public int UserPreferenceId { get; set; }
         public bool IsActive { get; set; }
         public string? UserInfoId { get; set; }
-        public UserInfo? UserInfo { get; set; }
+        public ApplicationUser? UserInfo { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
         public int AuthorId { get; set; }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -32,8 +33,8 @@ namespace LibraryAPI_R53_A.Core.Domain
         public IFormFile? AgreementBookCopy { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
-
-        //public ICollection<BookAuthor>? BookAuthor { get; set; }
+        [JsonIgnore]
+        public ICollection<BookAuthor>? BookAuthor { get; set; }
 
         public List<BookCopy> Copies { get; set; } = new List<BookCopy>();
 

@@ -5,7 +5,7 @@
         public int BookWishlistId { get; set; }
         public bool IsActive { get; set; }
         public string? UserId { get; set; }
-        public UserInfo? UserInfo { get; set; }
+        public ApplicationUser? UserInfo { get; set; }
         public int? BookId { get; set; }
         public Book? Book { get; set; }
     }

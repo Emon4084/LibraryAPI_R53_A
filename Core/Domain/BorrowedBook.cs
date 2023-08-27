@@ -9,7 +9,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         [Key]
         public int BorrowedBookId { get; set; }
         public string? UserId { get; set; }
-        public UserInfo? UserInfo { get; set; }
+        public ApplicationUser? UserInfo { get; set; }
         public int? BookId { get; set; }
         public Book? Book { get; set; }
         public int BookCopyId { get; set; }

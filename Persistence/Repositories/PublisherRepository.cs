@@ -1,49 +1,62 @@
 ﻿using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace LibraryAPI_R53_A.Persistence.Repositories
 {
-    public class PublisherRepository : Repository<Publisher>
+    public class PublisherRepository : IPublisher
     {
-        public PublisherRepository(LibraryDbContext context):base(context)
+        private readonly ApplicationDbContext _context;
+
+        public PublisherRepository(ApplicationDbContext context)
         {
-            
+            _context = context;
         }
 
-        public LibraryDbContext libraryContext => _context as LibraryDbContext;
-        public void Add(Publisher publisher)
+
+        public async Task<IEnumerable<Publisher>> GetAll()
         {
-            libraryContext.Publishers.Add(publisher);
-            libraryContext.SaveChanges();
-            
+            return await _context.Publishers.ToListAsync();
         }
 
-        public Task<IEnumerable<Publisher>> Find(Expression<Func<Publisher, bool>> predicate)
+        public async Task<Publisher?> Get(int id)
         {
-            throw new NotImplementedException();
+            var publisher = await _context.Publishers.FindAsync(id);
+            return publisher;
         }
 
-        public Task<Publisher> Get(int id)
+        public async Task<Publisher?> Post(Publisher entity)
         {
-            throw new NotImplementedException();
+            if (_context.Publishers.Any(p=>p.PublisherName==entity.PublisherName))
+            {
+                return null;
+            }
+            _context.Publishers.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<IEnumerable<Publisher>> GetAll()
+        public async Task<Publisher?> Put(int id, Publisher entity)
         {
-            throw new NotImplementedException();
+            var existPublisher = await _context.Publishers.FindAsync(id);
+            if (existPublisher != null)
+            {
+                _context.Entry(existPublisher).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
+            return entity;
         }
-
-        public void Remove(Publisher entity)
+        public async Task<Publisher?> Delete(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        
-
-        public void Update(Publisher entities)
-        {
-            throw new NotImplementedException();
+            var publisher = await _context.Publishers.FindAsync(id);
+            if (publisher != null)
+            {
+                _context.Publishers.Remove(publisher);
+                await _context.SaveChangesAsync();
+            return publisher;
+            }
+            return null;
         }
     }
 }
