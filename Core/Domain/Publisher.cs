@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -11,6 +12,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public bool IsActive { get; set; }
-        //public ICollection<Book>? Books { get; set; }
+        [JsonIgnore]
+        public ICollection<Book>? Books { get; set; }
     }
 }

@@ -20,8 +20,8 @@ namespace LibraryAPI_R53_A.Core.Domain
         public bool IsReturned { get; set; }
         public bool IsActive { get; set; }
         public DateTime? ActualReturnDate { get; set; }
-        //public System.Collections.Generic.ICollection<Inspection>? Inspection { get; set; }
-        //public System.Collections.Generic.ICollection<Fine>? Fine { get; set; }
+        public ICollection<Inspection>? Inspection { get; set; }
+        public ICollection<Fine>? Fine { get; set; }
 
 
     }

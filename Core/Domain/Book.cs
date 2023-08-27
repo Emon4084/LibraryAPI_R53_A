@@ -37,9 +37,11 @@ namespace LibraryAPI_R53_A.Core.Domain
         public ICollection<BookAuthor>? BookAuthor { get; set; }
 
         public List<BookCopy> Copies { get; set; } = new List<BookCopy>();
-
-        //public virtual ICollection<BookReview>? BookReviews { get; set; }
-        //public virtual ICollection<BookWishlist>? BookWishlists { get; set; }
-        //public virtual ICollection<BorrowedBook>? BorrowedBooks { get; set;}
+        [JsonIgnore]
+        public ICollection<BookReview>? BookReviews { get; set; }
+        [JsonIgnore]
+        public  ICollection<BookWishlist>? BookWishlists { get; set; }
+        [JsonIgnore]
+        public ICollection<BorrowedBook>? BorrowedBooks { get; set;}
     }
 }

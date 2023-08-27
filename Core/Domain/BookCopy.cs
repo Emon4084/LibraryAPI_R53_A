@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -20,7 +21,9 @@ namespace LibraryAPI_R53_A.Core.Domain
         public Book? Book { get; set; }
         public int ShelfId { get; set; }
         public Shelf? Shelf { get; set; }
-
-        //public virtual ICollection<BorrowedBook>? BorrowBook { get; set; }
+        [JsonIgnore]
+        public ICollection<BorrowedBook>? BorrowBook { get; set; }
+        [JsonIgnore]
+        public ICollection<Inspection>? Inspections { get; set; }
     }
 }

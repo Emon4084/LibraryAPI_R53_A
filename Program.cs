@@ -1,5 +1,7 @@
 using LibraryAPI_R53_A.Core.Domain;
+using LibraryAPI_R53_A.Core.Repositories;
 using LibraryAPI_R53_A.Persistence;
+using LibraryAPI_R53_A.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +30,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
+
+//DI
+builder.Services.AddTransient<IPublisher, PublisherRepository>();
+
+
 
 // Add ASP.NET Core Identity support
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

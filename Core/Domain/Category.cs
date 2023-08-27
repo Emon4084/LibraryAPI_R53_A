@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -10,8 +11,10 @@ namespace LibraryAPI_R53_A.Core.Domain
         public bool IsActive { get; set; }
 
         public virtual List<Subcategory> Subcategories { get; set; } = new List<Subcategory>();
-        //public virtual ICollection<Book>? Books { get; set; }
-        //public virtual ICollection<UserPreference>? UserPreference { get; set; }
+        [JsonIgnore]
+        public ICollection<Book>? Books { get; set; }
+        [JsonIgnore]
+        public ICollection<UserPreference>? UserPreferences { get; set; }
 
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -19,7 +20,12 @@ namespace LibraryAPI_R53_A.Core.Domain
         public int SubscriptionId { get; set; }
         public SubscriptionPlan? SubscriptionPlan { get; set; }
         public virtual List<UserPreference> UserPreferences { get; set; } = new List<UserPreference>();
-        //public virtual ICollection<BookReview>? BookReviews { get; set; }
+        [JsonIgnore]
+        public ICollection<BookReview>? BookReviews { get; set; }
+        [JsonIgnore]
+        public ICollection<BorrowedBook>? BorrowedBooks { get; set;}
+        [JsonIgnore]
+        public ICollection<BookWishlist>? BookWishlists { get; set; }
         public string? TransactionId { get; set; } //bkash or other 3rd party payment
     }
 }
