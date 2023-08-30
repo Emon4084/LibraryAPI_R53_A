@@ -28,7 +28,7 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<Publisher?> Post(Publisher entity)
         {
-            if (_context.Publishers.Any(p=>p.PublisherName==entity.PublisherName))
+            if (_context.Publishers.Any(p => p.PublisherName == entity.PublisherName))
             {
                 return null;
             }
@@ -37,16 +37,29 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return entity;
         }
 
-        public async Task<Publisher?> Put(int id, Publisher entity)
+        public async Task<Publisher?> Put(int id, Publisher publisher)
         {
-            var existPublisher = await _context.Publishers.FindAsync(id);
-            if (existPublisher != null)
+            var existingPublisher = await _context.Publishers.FindAsync(id);
+
+            if (existingPublisher == null)
             {
-                _context.Entry(existPublisher).CurrentValues.SetValues(entity);
-                await _context.SaveChangesAsync();
+                return null;
             }
-            return entity;
+
+            //can use automapper here
+            existingPublisher.PublisherName = publisher.PublisherName;
+            existingPublisher.Address = publisher.Address;
+            existingPublisher.Email = publisher.Email;
+            existingPublisher.PhoneNumber = publisher.PhoneNumber;
+            existingPublisher.IsActive = publisher.IsActive;
+
+            _context.Publishers.Update(existingPublisher);
+            await _context.SaveChangesAsync();
+
+            return existingPublisher;
         }
+        
+    
         public async Task<Publisher?> Delete(int id)
         {
             var publisher = await _context.Publishers.FindAsync(id);
@@ -54,9 +67,11 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             {
                 _context.Publishers.Remove(publisher);
                 await _context.SaveChangesAsync();
-            return publisher;
+                return publisher;
             }
             return null;
         }
+
+      
     }
 }

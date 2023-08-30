@@ -22,7 +22,7 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(publisher);
         }
 
-        [HttpGet("{id}")] 
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var publisher = await _publisher.Get(id);
@@ -37,7 +37,7 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, Publisher publisher)
+        public async Task<IActionResult> Edit( int id,Publisher publisher)
         {
             var updated = await _publisher.Put(id, publisher);
             return Ok(updated);
@@ -47,7 +47,7 @@ namespace LibraryAPI_R53_A.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _publisher.Delete(id);
-            return RedirectToAction("GetAll");
+            return Ok();
         }
 
     }
