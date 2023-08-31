@@ -1,5 +1,7 @@
-﻿using LibraryAPI_R53_A.Core.Domain;
+﻿using AutoMapper;
+using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.Core.Repositories;
+using LibraryAPI_R53_A.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,11 @@ namespace LibraryAPI_R53_A.Controllers
     public class PublishersController : ControllerBase
     {
         private IPublisher _publisher;
-        public PublishersController(IPublisher publisher)
+        private readonly IMapper _mapper;
+        public PublishersController(IPublisher publisher, IMapper map)
         {
             _publisher = publisher;
+            _mapper = map;
         }
 
         [HttpGet]
@@ -36,18 +40,25 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(model);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Edit( int id,Publisher publisher)
+        [HttpPut]
+        public async Task<IActionResult> Edit(PublisherDto publisherD)
         {
-            var updated = await _publisher.Put(id, publisher);
+            var updated = _mapper.Map<Publisher>(publisherD);
+
+            await _publisher.Put(updated);
             return Ok(updated);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<PublisherDto>> Delete(int id)
         {
-            await _publisher.Delete(id);
-            return Ok();
+            var publisherD = await _publisher.Get(id);
+            if (publisherD == null)
+            {
+                return NotFound();
+            }
+            _publisher.Delete(publisherD);
+            return Ok(publisherD);
         }
 
     }
