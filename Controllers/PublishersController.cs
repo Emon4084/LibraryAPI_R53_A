@@ -41,24 +41,20 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Edit(PublisherDto publisherD)
+        public async Task<IActionResult> Edit(PublisherDto publisherDt)
         {
-            var updated = _mapper.Map<Publisher>(publisherD);
+            var updated = _mapper.Map<Publisher>(publisherDt);
 
             await _publisher.Put(updated);
             return Ok(updated);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PublisherDto>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var publisherD = await _publisher.Get(id);
-            if (publisherD == null)
-            {
-                return NotFound();
-            }
-            _publisher.Delete(publisherD);
-            return Ok(publisherD);
+            
+            await _publisher.Delete(id);
+            return Ok("Deleted");
         }
 
     }

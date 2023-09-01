@@ -10,12 +10,12 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
     public class PublisherRepository : IPublisher
     {
         private readonly ApplicationDbContext _context;
-        
+
 
         public PublisherRepository(ApplicationDbContext context)
         {
             _context = context;
-           
+
         }
 
 
@@ -41,60 +41,21 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return entity;
         }
 
-        //public async Task<Publisher?> Put(Publisher publisher)
-        //{
-        //    //var existingPublisher = await _context.Publishers.FindAsync(id);
-
-        //    //if (existingPublisher == null)
-        //    //{
-        //    //    return null;
-        //    //}
-
-        //    ////can use automapper here
-        //    //existingPublisher.PublisherName = publisher.PublisherName;
-        //    //existingPublisher.Address = publisher.Address;
-        //    //existingPublisher.Email = publisher.Email;
-        //    //existingPublisher.PhoneNumber = publisher.PhoneNumber;
-        //    //existingPublisher.IsActive = publisher.IsActive;
-
-        //    //_context.Publishers.Update(existingPublisher);
-        //    //await _context.SaveChangesAsync();
-
-        //    //return existingPublisher;
-
-
-
-
-        //    _context.Publishers.Update(publisher);
-        //    await _context.SaveChangesAsync();
-
-
-        //}
-
-
-        //public async Task<Publisher?> Delete(int id)
-        //{
-        //    var publisher = await _context.Publishers.FindAsync(id);
-        //    if (publisher != null)
-        //    {
-        //        _context.Publishers.Remove(publisher);
-        //        await _context.SaveChangesAsync();
-        //        return publisher;
-        //    }
-        //    return null;
-        //}
-
-        public async Task<Publisher?> Put(Publisher publisher)
+        public async Task Put(Publisher publisher)
         {
             _context.Publishers.Update(publisher);
             await _context.SaveChangesAsync();
-            return publisher;
+
         }
 
-        public void Delete(Publisher publisher)
+        public async Task Delete(int id)
         {
-            _context.Publishers.Remove(publisher);
-            _context.SaveChangesAsync();
+            var publisher = await _context.Publishers.FindAsync(id);
+            if (publisher != null)
+            {
+                _context.Publishers.Remove(publisher);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
