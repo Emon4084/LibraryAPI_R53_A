@@ -1,4 +1,5 @@
 using LibraryAPI_R53_A.Core.Domain;
+using LibraryAPI_R53_A.Core.Interfaces;
 using LibraryAPI_R53_A.Core.Repositories;
 using LibraryAPI_R53_A.Persistence;
 using LibraryAPI_R53_A.Persistence.Repositories;
@@ -34,6 +35,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //DI
 builder.Services.AddTransient<IPublisher, PublisherRepository>();
+builder.Services.AddTransient<ISubscriptionPlan, SubsPlanRepository>();
+builder.Services.AddTransient<ICategory, CategoryRepository>();
+builder.Services.AddTransient<IRepository<BookFloor>, BookFloorRepository>();
 
 
 

@@ -95,9 +95,10 @@ namespace LibraryAPI_R53_A.Persistence
             //Subcategory
             modelBuilder.Entity<Subcategory>().HasOne(p => p.Category).WithMany(b => b.Subcategories).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
 
-            ////UserInfo
-            //modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
-            //modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany().HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
+
+            //ApplicationUser
+            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany(p => p.Users).HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
 
             //UserPreference
             modelBuilder.Entity<UserPreference>().HasOne(p => p.UserInfo).WithMany(b => b.UserPreferences).HasForeignKey(p => p.UserInfoId).OnDelete(DeleteBehavior.Restrict);

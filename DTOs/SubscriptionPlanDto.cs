@@ -1,16 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace LibraryAPI_R53_A.Core.Domain
+﻿namespace LibraryAPI_R53_A.DTOs
 {
-    public class SubscriptionPlan
+    public class SubscriptionPlanDto
     {
         public int SubscriptionPlanId { get; set; }
         public string? PlanName { get; set; }
         public string? PlanDescription { get; set; }
         public decimal PlanPrice { get; set; }
         public bool IsActive { get; set; }
-        [JsonIgnore]
-        public ICollection<ApplicationUser>? Users { get; set; }
     }
 }

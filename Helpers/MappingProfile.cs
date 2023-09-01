@@ -9,6 +9,8 @@ namespace LibraryAPI_R53_A.Helpers
         public MappingProfile()
         {
             CreateMap<PublisherDto, Publisher>();
+            CreateMap<SubscriptionPlanDto, SubscriptionPlan>();
+            CreateMap<CategoryDto, Category>();
         }
     }
 }
