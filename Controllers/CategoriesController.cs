@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI_R53_A.Core.Domain;
+using LibraryAPI_R53_A.Core.Interfaces;
 using LibraryAPI_R53_A.Core.Repositories;
 using LibraryAPI_R53_A.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -9,53 +10,53 @@ namespace LibraryAPI_R53_A.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PublishersController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
-        private IPublisher _publisher;
+        private ICategory _category;
         private readonly IMapper _mapper;
-        public PublishersController(IPublisher publisher, IMapper map)
+        public CategoriesController(ICategory category, IMapper map)
         {
-            _publisher = publisher;
+            _category = category;
             _mapper = map;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPublishers()
+        public async Task<IActionResult> GetCategorys()
         {
-            var publisher = await _publisher.GetAll();
-            return Ok(publisher);
+            var category = await _category.GetAll();
+            return Ok(category);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var publisher = await _publisher.Get(id);
-            return Ok(publisher);
+            var category = await _category.Get(id);
+            return Ok(category);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Publisher model)
+        public async Task<IActionResult> Post(Category model)
         {
-            await _publisher.Post(model);
+            await _category.Post(model);
             return Ok(model);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Edit(PublisherDto publisherDt)
+        public async Task<IActionResult> Edit(CategoryDto categoryDt)
         {
-            var updated = _mapper.Map<Publisher>(publisherDt);
+            var updated = _mapper.Map<Category>(categoryDt);
 
-            await _publisher.Put(updated);
+            await _category.Put(updated);
             return Ok(updated);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            
-            await _publisher.Delete(id);
+
+            await _category.Delete(id);
             return Ok("Deleted");
         }
-
     }
 }
+

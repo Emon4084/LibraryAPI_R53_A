@@ -1,4 +1,5 @@
 using LibraryAPI_R53_A.Core.Domain;
+using LibraryAPI_R53_A.Core.Interfaces;
 using LibraryAPI_R53_A.Core.Repositories;
 using LibraryAPI_R53_A.Persistence;
 using LibraryAPI_R53_A.Persistence.Repositories;
@@ -10,8 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddEndpointsApiExplorer();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddSwaggerGen();
 
@@ -33,6 +35,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //DI
 builder.Services.AddTransient<IPublisher, PublisherRepository>();
+builder.Services.AddTransient<ISubscriptionPlan, SubsPlanRepository>();
+builder.Services.AddTransient<ICategory, CategoryRepository>();
+builder.Services.AddTransient<IRepository<BookFloor>, BookFloorRepository>();
 
 
 
