@@ -41,7 +41,8 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(model);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
+
         public async Task<IActionResult> Edit(SubscriptionPlanDto SubscriptionPlanDt)
         {
             var updated = _mapper.Map<SubscriptionPlan>(SubscriptionPlanDt);
@@ -55,7 +56,8 @@ namespace LibraryAPI_R53_A.Controllers
         {
 
             await _SubscriptionPlan.Delete(id);
-            return Ok("Deleted");
+            return Ok(new { message = "Deleted successfully" });
+
         }
 
     }
