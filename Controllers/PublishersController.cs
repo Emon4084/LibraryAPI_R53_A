@@ -40,7 +40,7 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(model);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Edit(PublisherDto publisherDt)
         {
             var updated = _mapper.Map<Publisher>(publisherDt);
@@ -54,7 +54,7 @@ namespace LibraryAPI_R53_A.Controllers
         {
             
             await _publisher.Delete(id);
-            return Ok("Deleted");
+            return Ok(new { message = "Deleted successfully" });
         }
 
     }

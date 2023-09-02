@@ -41,7 +41,7 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(model);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Edit(CategoryDto categoryDt)
         {
             var updated = _mapper.Map<Category>(categoryDt);
@@ -55,7 +55,7 @@ namespace LibraryAPI_R53_A.Controllers
         {
 
             await _category.Delete(id);
-            return Ok("Deleted");
+            return Ok(new { message = "Deleted successfully" });
         }
     }
 }
