@@ -1,10 +1,12 @@
 ﻿using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.DTOs.Account;
 using LibraryAPI_R53_A.Persistence.services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace LibraryAPI_R53_A.Controllers
 {
@@ -22,6 +24,14 @@ namespace LibraryAPI_R53_A.Controllers
             _signInManager = signInManager; 
             _userManager = userManager;
         }
+
+        //[Authorize]
+        //[HttpPost("refersh-user-token")]
+        //public async Task<ActionResult<UserDto>> RefershToken()
+        //{
+        //    var user = await _userManager.FindByNameAsync(User.FindFirst(ClaimTypes.Email)?.Value);
+        //    return CreateApplicationUserDto(user);
+        //}
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto model)
