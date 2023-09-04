@@ -25,8 +25,7 @@ namespace LibraryAPI_R53_A.Persistence.services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.UserName),
-                new Claim("my own claim name", "this is the value")
+                new Claim(ClaimTypes.GivenName, user.UserName) 
             };
 
             var creadentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha256Signature);
