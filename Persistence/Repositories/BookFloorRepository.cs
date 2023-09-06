@@ -59,5 +59,20 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public IEnumerable<BookFloor> Search(string query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BookFloor> GetActive()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BookFloor> GetInactive()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
