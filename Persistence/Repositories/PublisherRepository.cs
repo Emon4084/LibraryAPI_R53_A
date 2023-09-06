@@ -57,5 +57,30 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+       
+
+        public IEnumerable<Publisher> Search(string searchString)
+        {
+            var publisher = from p in _context.Publishers
+                        where p.PublisherName.ToLower().Contains(searchString.ToLower())
+                        select p;
+            return publisher.ToList();
+        }
+        public IEnumerable<Publisher> GetActive()
+        {
+            var publisher = from b in _context.Publishers
+                       where b.IsActive == true
+                       select b;
+            return publisher;
+        }
+
+        public IEnumerable<Publisher> GetInactive()
+        {
+            var publisher = from b in _context.Publishers
+                       where b.IsActive == false
+                       select b;
+            return publisher;
+        }
     }
 }

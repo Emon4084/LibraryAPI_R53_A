@@ -57,6 +57,30 @@ namespace LibraryAPI_R53_A.Controllers
             await _category.Delete(id);
             return Ok(new { message = "Deleted successfully" });
         }
+
+
+        [HttpGet, Route("SearchCategory/{searchString}")]
+        public IActionResult SearchByCategoryName(string searchString)
+        {
+            var category = _category.Search(searchString);
+            return Ok(category);
+        }
+
+        [HttpGet, Route("GetActiveCategory")]
+        public IActionResult GetActiveCategory()
+        {
+            var category = _category.GetActive();
+            return Ok(category);
+        }
+
+        [HttpGet, Route("GetInactiveCategory")]
+        public IActionResult GetInactiveCategory()
+        {
+            var category = _category.GetInactive();
+            return Ok(category);
+        }
+
+
     }
 }
 

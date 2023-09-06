@@ -57,5 +57,26 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(new { message = "Deleted successfully" });
         }
 
+        [HttpGet, Route("SearchPublisher/{searchString}")]
+        public IActionResult SearchByPublisherName(string searchString)
+        {
+            var publisher = _publisher.Search(searchString);
+            return Ok(publisher);
+        }
+
+        [HttpGet, Route("GetActivePublisher")]
+        public IActionResult GetActivePublisher()
+        {
+            var publisher = _publisher.GetActive();
+            return Ok(publisher);
+        }
+
+        [HttpGet, Route("GetInactivePublishers")]
+        public IActionResult GetInactivePublisher()
+        {
+            var publisher = _publisher.GetInactive();
+            return Ok(publisher);
+        }
+
     }
 }

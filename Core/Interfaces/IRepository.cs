@@ -11,6 +11,10 @@ namespace LibraryAPI_R53_A.Core.Repositories
 
         Task Delete(int id);
 
+        IEnumerable<TEntity> Search(string searchString);
+        IEnumerable<TEntity> GetActive();
+        IEnumerable<TEntity> GetInactive();
+  
 
     }
 }

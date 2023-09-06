@@ -10,44 +10,44 @@ namespace LibraryAPI_R53_A.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubscriptionPlansController : ControllerBase
+    public class subscriptionPlansController : ControllerBase
     {
-        private ISubscriptionPlan _SubscriptionPlan;
+        private ISubscriptionPlan _subscriptionPlan;
         private readonly IMapper _mapper;
-        public SubscriptionPlansController(ISubscriptionPlan SubscriptionPlan, IMapper map)
+        public subscriptionPlansController(ISubscriptionPlan subscriptionPlan, IMapper map)
         {
-            _SubscriptionPlan = SubscriptionPlan;
+            _subscriptionPlan = subscriptionPlan;
             _mapper = map;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSubscriptionPlans()
+        public async Task<IActionResult> GetsubscriptionPlans()
         {
-            var SubscriptionPlan = await _SubscriptionPlan.GetAll();
-            return Ok(SubscriptionPlan);
+            var subscriptionPlan = await _subscriptionPlan.GetAll();
+            return Ok(subscriptionPlan);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var SubscriptionPlan = await _SubscriptionPlan.Get(id);
-            return Ok(SubscriptionPlan);
+            var subscriptionPlan = await _subscriptionPlan.Get(id);
+            return Ok(subscriptionPlan);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(SubscriptionPlan model)
         {
-            await _SubscriptionPlan.Post(model);
+            await _subscriptionPlan.Post(model);
             return Ok(model);
         }
 
         [HttpPut("{id}")]
 
-        public async Task<IActionResult> Edit(SubscriptionPlanDto SubscriptionPlanDt)
+        public async Task<IActionResult> Edit(SubscriptionPlanDto subscriptionPlanDt)
         {
-            var updated = _mapper.Map<SubscriptionPlan>(SubscriptionPlanDt);
+            var updated = _mapper.Map<SubscriptionPlan>(subscriptionPlanDt);
 
-            await _SubscriptionPlan.Put(updated);
+            await _subscriptionPlan.Put(updated);
             return Ok(updated);
         }
 
@@ -55,10 +55,35 @@ namespace LibraryAPI_R53_A.Controllers
         public async Task<IActionResult> Delete(int id)
         {
 
-            await _SubscriptionPlan.Delete(id);
+            await _subscriptionPlan.Delete(id);
             return Ok(new { message = "Deleted successfully" });
 
         }
+
+
+
+        [HttpGet, Route("SearchSubscription/{searchString}")]
+        public IActionResult SearchBySubscriptionName(string searchString)
+        {
+            var subscriptionPlan = _subscriptionPlan.Search(searchString);
+            return Ok(subscriptionPlan);
+        }
+
+        [HttpGet, Route("GetActiveSubscription")]
+        public IActionResult GetActiveSubscription()
+        {
+            var subscriptionPlan = _subscriptionPlan.GetActive();
+            return Ok(subscriptionPlan);
+        }
+
+        [HttpGet, Route("GetInactiveSubscriptions")]
+        public IActionResult GetInactiveSubscription()
+        {
+            var subscriptionPlan = _subscriptionPlan.GetInactive();
+            return Ok(subscriptionPlan);
+        }
+
+
 
     }
 }

@@ -54,5 +54,28 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public IEnumerable<Category> Search(string searchString)
+        {
+            var category = from p in _context.Categorys
+                            where p.CategoryName.ToLower().Contains(searchString.ToLower())
+                            select p;
+            return category.ToList();
+        }
+        public IEnumerable<Category> GetActive()
+        {
+            var category = from b in _context.Categorys
+                            where b.IsActive == true
+                            select b;
+            return category;
+        }
+
+        public IEnumerable<Category> GetInactive()
+        {
+            var category = from b in _context.Categorys
+                            where b.IsActive == false
+                            select b;
+            return category;
+        }
     }
 }
