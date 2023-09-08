@@ -64,9 +64,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 
 
-#region Step 04
+#region Step 04. R-Step 03
 // able to Inject JWTService class inside my Controller
 builder.Services.AddScoped<JWTService>();
+builder.Services.AddScoped<ContextSeedService>();
 #endregion 
 
 #region setp 01
@@ -118,30 +119,12 @@ builder.Services.AddTransient<ISubscriptionPlan, SubsPlanRepository>();
 builder.Services.AddTransient<ICategory, CategoryRepository>();
 builder.Services.AddTransient<IRepository<BookFloor>, BookFloorRepository>();
 
-// Add Authentication services & middlewares
-//builder.Services.AddAuthentication(opt =>
-//{
-//    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        RequireExpirationTime = true,
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-//        ValidAudience = builder.Configuration["JwtSettings:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(
-//            System.Text.Encoding.UTF8.GetBytes(
-//                builder.Configuration["JwtSettings:SecurityKey"]))
-//    };
-//});
-
-//builder.Services.AddScoped<JwtHandler>();
-
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    opt.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager"));
+    opt.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+});
 
 
 var app = builder.Build();
@@ -160,5 +143,20 @@ app.UseAuthorization();
 app.UseCors("AngularPolicy");
 
 app.MapControllers();
+
+#region  Context Seed. R-step 04
+using var scope = app.Services.CreateScope();
+try
+{
+    var contextSeedService = scope.ServiceProvider.GetService<ContextSeedService>();
+    await contextSeedService.InitializeContextAsync();
+}
+catch(Exception ex)
+{
+    var logger = scope.ServiceProvider.GetServices<ILogger<Program>>();
+    //logger.logError(ex.Message, "Failed to initialilze and seed the database");
+}
+
+#endregion
 
 app.Run();

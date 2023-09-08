@@ -1,4 +1,5 @@
 ﻿using LibraryAPI_R53_A.Core.Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,15 +12,17 @@ namespace LibraryAPI_R53_A.Persistence.services
     public class JWTService
     {
         private readonly IConfiguration _config;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SymmetricSecurityKey _jwtKey;
-        public JWTService(IConfiguration config) 
+        public JWTService(IConfiguration config, UserManager<ApplicationUser>userManager) 
         {
             _config = config;
+            _userManager = userManager;
             // jwtKEy is used for both encripting and decripting the JWT token
             _jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
         }
 
-        public string CreateJWT(ApplicationUser user)
+        public async Task<string> CreateJWT(ApplicationUser user)
         {
             var userClaims = new List<Claim>
             {
@@ -27,6 +30,12 @@ namespace LibraryAPI_R53_A.Persistence.services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, user.UserName) 
             };
+
+            // ----------- R-Step 04 ------------
+            // Passing user Roles into JWT token.
+            var roles = await _userManager.GetRolesAsync(user);
+            userClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            //-------------------------------------------
 
             var creadentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha256Signature);
             var tokenDescriptor = new SecurityTokenDescriptor

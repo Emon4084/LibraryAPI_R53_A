@@ -1,4 +1,5 @@
-﻿using LibraryAPI_R53_A.Core.Domain;
+﻿using LibraryAPI_R53_A.Core;
+using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.DTOs.Account;
 using LibraryAPI_R53_A.Persistence.services;
 using Microsoft.AspNetCore.Authorization;
@@ -47,12 +48,18 @@ namespace LibraryAPI_R53_A.Controllers
             }
             // CheckPasswordSignInAsync = true. then unauthenticate person try to lgin. he's account will be locked. 
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
+            if (result.IsLockedOut)
+            {
+                return Unauthorized(string.Format("Your Account is locked.", user.LockoutEnd));
+            }
+
             if(!result.Succeeded)
             {
                 return Unauthorized("Invalid userName or password");
             }
 
-            return CreateApplicationUserDto(user);
+            return await CreateApplicationUserDto(user);
         }
 
         [HttpPost("register")]
@@ -72,18 +79,19 @@ namespace LibraryAPI_R53_A.Controllers
 
             var result = await _userManager.CreateAsync(userToAdd, model.Password);
             if(!result.Succeeded) return BadRequest(result.Errors);
+            await _userManager.AddToRoleAsync(userToAdd, SD.UserRole);
 
             return Ok("Your account has been created, try to login");
         }
 
 
         #region Private Helper methods
-        private UserDto CreateApplicationUserDto(ApplicationUser user)
+        private async Task<UserDto> CreateApplicationUserDto(ApplicationUser user)
         {
             return new UserDto
             {
                 UserName = user.UserName,
-                JWT = _jwtService.CreateJWT(user)
+                JWT =await _jwtService.CreateJWT(user)
             };
         }
 
