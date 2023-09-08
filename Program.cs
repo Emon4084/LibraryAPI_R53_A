@@ -38,6 +38,7 @@ builder.Services.AddTransient<IPublisher, PublisherRepository>();
 builder.Services.AddTransient<ISubscriptionPlan, SubsPlanRepository>();
 builder.Services.AddTransient<ICategory, CategoryRepository>();
 builder.Services.AddTransient<IRepository<BookFloor>, BookFloorRepository>();
+builder.Services.AddTransient<IRepository<Shelf>, ShelfRepository>();
 
 
 
