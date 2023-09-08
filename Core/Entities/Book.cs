@@ -20,7 +20,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Description { get; set; }
         public decimal? BookPrice { get; set; }
         [NotMapped]
-        public decimal? RentPrice { get; set; }
+        public decimal? RentPrice { get; set; } //calculative field
         public string? DDCCode { get; set; }
         public bool IsActive { get; set; }
         [NotMapped]
@@ -35,6 +35,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public Category? Category { get; set; }
         [JsonIgnore]
         public ICollection<BookAuthor>? BookAuthor { get; set; }
+        [JsonIgnore]
 
         public List<BookCopy> Copies { get; set; } = new List<BookCopy>();
         [JsonIgnore]
