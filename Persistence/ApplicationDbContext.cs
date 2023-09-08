@@ -28,6 +28,7 @@ namespace LibraryAPI_R53_A.Persistence
         public DbSet<Shelf> Shelfs { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<BookRack> BookRacks { get; set; }
 
         //public DbSet<ApplicationUser> UserInfos { get; set; }
         public DbSet<UserPreference> UserPreferences { get; set; }
@@ -67,7 +68,7 @@ namespace LibraryAPI_R53_A.Persistence
             modelBuilder.Entity<BookCopy>().HasOne(p => p.Shelf).WithMany(b => b.Copies).HasForeignKey(p => p.ShelfId).OnDelete(DeleteBehavior.Restrict);
 
             //Book Rack
-            modelBuilder.Entity<BookRack>().HasOne(p => p.Shelf).WithMany(b => b.BookRacks).HasForeignKey(p => p.ShelfId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<BookRack>().HasOne(p => p.Shelf).WithMany(b => b.BookRacks).HasForeignKey(p => p.ShelfId);
 
             //Book Review
             modelBuilder.Entity<BookReview>().HasOne(p => p.Book).WithMany(b => b.BookReviews).HasForeignKey(p => p.BookId).OnDelete(DeleteBehavior.Restrict);

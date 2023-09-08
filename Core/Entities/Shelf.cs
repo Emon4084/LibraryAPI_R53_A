@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -9,7 +10,8 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? ShelfName { get; set; }
         public int BookFloorId { get; set; }
         public BookFloor? BookFloor { get; set; }
-        public List<BookCopy> Copies { get; set; } = new List<BookCopy>();
         public virtual List<BookRack> BookRacks { get; set; } = new List<BookRack>();
+        [JsonIgnore]
+        public List<BookCopy> Copies { get; set; } = new List<BookCopy>();
     }
 }

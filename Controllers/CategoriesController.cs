@@ -21,7 +21,7 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategorys()
+        public async Task<IActionResult> GetCategories()
         {
             var category = await _category.GetAll();
             return Ok(category);
