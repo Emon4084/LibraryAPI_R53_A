@@ -1,6 +1,7 @@
 using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.Core.Interfaces;
 using LibraryAPI_R53_A.Core.Repositories;
+using LibraryAPI_R53_A.Helpers;
 using LibraryAPI_R53_A.Persistence;
 using LibraryAPI_R53_A.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -34,12 +35,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 
 //DI
-builder.Services.AddTransient<IPublisher, PublisherRepository>();
-builder.Services.AddTransient<ISubscriptionPlan, SubsPlanRepository>();
-builder.Services.AddTransient<ICategory, CategoryRepository>();
-builder.Services.AddTransient<IRepository<BookFloor>, BookFloorRepository>();
-builder.Services.AddTransient<IRepository<Shelf>, ShelfRepository>();
-builder.Services.AddTransient<IRepository<Subcategory>, SubcategoryRepository>();
+builder.Services.AddScoped<IPublisher, PublisherRepository>();
+builder.Services.AddScoped<ISubscriptionPlan, SubsPlanRepository>();
+builder.Services.AddScoped<ICategory, CategoryRepository>();
+builder.Services.AddScoped<IBook, BookRepository>();
+builder.Services.AddScoped<IRepository<BookFloor>, BookFloorRepository>();
+builder.Services.AddScoped<IRepository<Shelf>, ShelfRepository>();
+builder.Services.AddScoped<IRepository<Subcategory>, SubcategoryRepository>();
 
 
 

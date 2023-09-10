@@ -12,6 +12,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Title { get; set; }
         public string? ISBN { get; set; }
         public int? PublisherId { get; set; }
+        [JsonIgnore]
         public Publisher? Publisher { get; set; }
         public DateTime PublishedYear { get; set; }
         public string? Edition { get; set; }
@@ -19,6 +20,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Language { get; set; }
         public string? Description { get; set; }
         public decimal? BookPrice { get; set; }
+        [JsonIgnore]
         [NotMapped]
         public decimal? RentPrice { get; set; } //calculative field
         public string? DDCCode { get; set; }
@@ -32,8 +34,9 @@ namespace LibraryAPI_R53_A.Core.Domain
         [NotMapped]
         public IFormFile? AgreementBookCopy { get; set; }
         public int CategoryId { get; set; }
-        public Category? Category { get; set; }
         [JsonIgnore]
+        public Category? Category { get; set; }
+       
         public ICollection<BookAuthor>? BookAuthor { get; set; }
         [JsonIgnore]
 
@@ -44,5 +47,9 @@ namespace LibraryAPI_R53_A.Core.Domain
         public  ICollection<BookWishlist>? BookWishlists { get; set; }
         [JsonIgnore]
         public ICollection<BorrowedBook>? BorrowedBooks { get; set;}
+
+        public string? CoverFileName { get; set; }
+        public string? EBookFileName { get; set; }
+        public string? AgreementFileName { get; set; }
     }
 }
