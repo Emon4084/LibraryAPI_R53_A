@@ -11,6 +11,11 @@ namespace LibraryAPI_R53_A.Helpers
             CreateMap<PublisherDto, Publisher>();
             CreateMap<SubscriptionPlanDto, SubscriptionPlan>();
             CreateMap<CategoryDto, Category>();
+
+            CreateMap<BookDto, Book>()
+            .ForMember(dest => dest.Cover, opt => opt.Ignore())
+            .ForMember(dest => dest.EBook, opt => opt.Ignore())
+            .ForMember(dest => dest.AgreementBookCopy, opt => opt.Ignore());
         }
     }
 }
