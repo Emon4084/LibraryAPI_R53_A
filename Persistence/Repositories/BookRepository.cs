@@ -2,6 +2,7 @@
 using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.Core.Interfaces;
 using LibraryAPI_R53_A.Core.Repositories;
+using LibraryAPI_R53_A.DTOs;
 using LibraryAPI_R53_A.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<IEnumerable<Book>> GetAll()
         {
-            return await _context.Books.ToListAsync();
+            return await _context.Books.Include(b => b.BookAuthor).ToListAsync();
 
         }
 
@@ -83,5 +84,56 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return await _context.Books.FirstOrDefaultAsync(b => b.ISBN == isbn);
         }
 
+        public async Task UpdateBookAuthors(Book book, IEnumerable<int> authorIds)
+        {
+            // Clear existing BookAuthor records for this book
+            book.BookAuthor.Clear();
+
+            foreach (var authorId in authorIds)
+            {
+                // Check if the BookAuthor record already exists for this BookId and AuthorId
+                var existingBookAuthor = _context.BooksAuthors
+                    .FirstOrDefault(ba => ba.BookId == book.BookId && ba.AuthorId == authorId);
+
+                if (existingBookAuthor == null)
+                {
+                    // If it doesn't exist, create a new one
+                    var bookAuthor = new BookAuthor
+                    {
+                        BookId = book.BookId,
+                        AuthorId = authorId
+                    };
+
+                    book.BookAuthor.Add(bookAuthor);
+                }
+                // If it exists, no need to create a duplicate entry
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAuthorsFromBook(int bookId,IEnumerable<int> authorIdsToRemove)
+        {
+            var book = await _context.Books
+                .Include(b => b.BookAuthor)
+                .SingleOrDefaultAsync(b => b.BookId == bookId);
+
+            if (book == null)
+            {
+                throw new InvalidOperationException("Book not found.");
+            }
+
+            foreach (var authorIdToRemove in authorIdsToRemove)
+            {
+                var bookAuthorToRemove = book.BookAuthor.FirstOrDefault(ba => ba.AuthorId == authorIdToRemove);
+
+                if (bookAuthorToRemove != null)
+                {
+                    book.BookAuthor.Remove(bookAuthorToRemove);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

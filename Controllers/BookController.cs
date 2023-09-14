@@ -22,7 +22,7 @@ namespace LibraryAPI_R53_A.Controllers
         private readonly FileHelper _fileHelper; // Add FileHelper
         private readonly IWebHostEnvironment _environment;
 
-        public BookController(IBook books,IMapper mapper, IWebHostEnvironment environment)
+        public BookController(IBook books, IMapper mapper, IWebHostEnvironment environment)
         {
             _b = books;
             _mapper = mapper;
@@ -62,6 +62,18 @@ namespace LibraryAPI_R53_A.Controllers
             book.EBookFileName = _fileHelper.SaveFile(model.EBook);
             book.AgreementFileName = _fileHelper.SaveFile(model.AgreementBookCopy);
 
+            foreach (var authorId in model.AuthorIds)
+            {
+                var bookAuthor = new BookAuthor
+                {
+                    BookId = book.BookId,
+                    AuthorId = authorId
+                };
+
+                // Add the bookAuthor to the database
+                book.BookAuthor.Add(bookAuthor);
+            }
+
 
             await _b.Post(book);
             return Ok(book);
@@ -75,7 +87,7 @@ namespace LibraryAPI_R53_A.Controllers
                 return BadRequest("Invalid data.");
             }
 
-            
+
             if (isbn != model.ISBN)
             {
                 return BadRequest("ISBN  does not match.");
@@ -90,33 +102,48 @@ namespace LibraryAPI_R53_A.Controllers
                 return NotFound("Book not found.");
             }
 
-            
+
             _mapper.Map(model, existingBook);
 
 
-            
+
             if (model.Cover != null)
             {
                 existingBook.CoverFileName = _fileHelper.SaveFile(model.Cover);
 
             }
-            
+
             if (model.EBook != null)
             {
                 existingBook.EBookFileName = _fileHelper.SaveFile(model.EBook);
 
             }
-            
+
             if (model.AgreementBookCopy != null)
             {
                 existingBook.AgreementFileName = _fileHelper.SaveFile(model.AgreementBookCopy);
 
             }
 
-            
+            // Update BookAuthor records
+            if (model.AuthorIds != null)
+            {
+                await _b.UpdateBookAuthors(existingBook, model.AuthorIds);
+            }
+
+
+            // Remove authors from the book if specified
+            if (model.AuthorIdsToRemove != null && model.AuthorIdsToRemove.Any())
+            {
+
+                await _b.RemoveAuthorsFromBook(existingBook.BookId, model.AuthorIdsToRemove);
+            }
+
+
+
             await _b.Put(existingBook);
 
-            return Ok(existingBook); 
+            return Ok(existingBook);
         }
 
 

@@ -56,11 +56,11 @@ namespace LibraryAPI_R53_A.Persistence
                 entity.HasKey(e => new { e.BookId, e.AuthorId });
                 entity.HasOne(e => e.Book)
                  .WithMany(e => e.BookAuthor)
-                 .HasForeignKey(e => e.BookId).OnDelete(DeleteBehavior.Restrict); ;
+                 .HasForeignKey(e => e.BookId) ;
 
                 entity.HasOne(e => e.Author)
                     .WithMany(e=>e.BookAuthor)
-                    .HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
+                    .HasForeignKey(e => e.AuthorId);
             });
 
             //BookCopy

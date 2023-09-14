@@ -15,7 +15,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public bool? IsActive { get; set; }
-        [JsonIgnore]
+        
         public ICollection<BookAuthor>? BookAuthor { get; set; } = null!;
         [JsonIgnore]
         public ICollection<UserPreference>? UserPreferences { get; set; } = null!;
