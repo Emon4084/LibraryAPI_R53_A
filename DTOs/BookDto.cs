@@ -27,6 +27,8 @@ namespace LibraryAPI_R53_A.DTOs
         public IFormFile? AgreementBookCopy { get; set; }
         public int CategoryId { get; set; }
         public ICollection<BookAuthor>? BookAuthor { get; set; }
+        public ICollection<int> AuthorIds { get; set; }
+        public ICollection<int>? AuthorIdsToRemove { get; set; }
 
 
     }
