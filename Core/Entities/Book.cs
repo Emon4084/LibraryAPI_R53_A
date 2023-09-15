@@ -20,9 +20,26 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Language { get; set; }
         public string? Description { get; set; }
         public decimal? BookPrice { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         [NotMapped]
-        public decimal? RentPrice { get; set; } //calculative field
+        public decimal? RentPrice
+        {
+            get
+            {
+                if (BookPrice.HasValue)
+                {
+                    return BookPrice * 0.7m; //70% of book price
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+
+
+        //calculative field
         public string? DDCCode { get; set; }
         public bool IsActive { get; set; }
         [NotMapped]
@@ -36,7 +53,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public int CategoryId { get; set; }
         [JsonIgnore]
         public Category? Category { get; set; }
-       
+
         public ICollection<BookAuthor>? BookAuthor { get; set; }
         [JsonIgnore]
 
@@ -44,9 +61,9 @@ namespace LibraryAPI_R53_A.Core.Domain
         [JsonIgnore]
         public ICollection<BookReview>? BookReviews { get; set; }
         [JsonIgnore]
-        public  ICollection<BookWishlist>? BookWishlists { get; set; }
+        public ICollection<BookWishlist>? BookWishlists { get; set; }
         [JsonIgnore]
-        public ICollection<BorrowedBook>? BorrowedBooks { get; set;}
+        public ICollection<BorrowedBook>? BorrowedBooks { get; set; }
 
         public string? CoverFileName { get; set; }
         public string? EBookFileName { get; set; }
