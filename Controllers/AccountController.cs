@@ -62,7 +62,7 @@ namespace LibraryAPI_R53_A.Controllers
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("register")]
+        [HttpPost("register")]  // /api/account/register
         public async Task<IActionResult> Register(RegisterDto model)
         {
             if(await CheckEmailExistsAsync(model.Email))
