@@ -24,7 +24,9 @@
                 file.CopyTo(fileStream);
             }
 
-            return uniqueFileName;
+            var fileUrl = "http://localhost:5154/" + "uploads/" + uniqueFileName;
+
+            return fileUrl;
         }
     }
 }
