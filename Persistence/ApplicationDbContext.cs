@@ -45,8 +45,8 @@ namespace LibraryAPI_R53_A.Persistence
 
 
             //Book Entity Relation
-            modelBuilder.Entity<Book>().HasOne(p => p.Publisher).WithMany(b=>b.Books).HasForeignKey(p => p.PublisherId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Book>().HasOne(p => p.Category).WithMany(b => b.Books).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Book>().HasOne(p => p.Publisher).WithMany(b=>b.Books).HasForeignKey(p => p.PublisherId);
+            modelBuilder.Entity<Book>().HasOne(p => p.Category).WithMany(b => b.Books).HasForeignKey(p => p.CategoryId);
             
 
             //Book Author 
@@ -64,47 +64,47 @@ namespace LibraryAPI_R53_A.Persistence
             });
 
             //BookCopy
-            modelBuilder.Entity<BookCopy>().HasOne(p => p.Book).WithMany(b => b.Copies).HasForeignKey(p => p.BookId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<BookCopy>().HasOne(p => p.Shelf).WithMany(b => b.Copies).HasForeignKey(p => p.ShelfId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<BookCopy>().HasOne(p => p.Book).WithMany(b => b.Copies).HasForeignKey(p => p.BookId);
+            modelBuilder.Entity<BookCopy>().HasOne(p => p.Shelf).WithMany(b => b.Copies).HasForeignKey(p => p.ShelfId);
 
             //Book Rack
             modelBuilder.Entity<BookRack>().HasOne(p => p.Shelf).WithMany(b => b.BookRacks).HasForeignKey(p => p.ShelfId);
 
             //Book Review
-            modelBuilder.Entity<BookReview>().HasOne(p => p.Book).WithMany(b => b.BookReviews).HasForeignKey(p => p.BookId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<BookReview>().HasOne(p => p.UserInfo).WithMany(b => b.BookReviews).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<BookReview>().HasOne(p => p.Book).WithMany(b => b.BookReviews).HasForeignKey(p => p.BookId);
+            modelBuilder.Entity<BookReview>().HasOne(p => p.UserInfo).WithMany(b => b.BookReviews).HasForeignKey(p => p.UserId);
 
             //BookWishlist
-            modelBuilder.Entity<BookWishlist>().HasOne(p => p.UserInfo).WithMany(b => b.BookWishlists).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<BookWishlist>().HasOne(p => p.Book).WithMany(b => b.BookWishlists).HasForeignKey(p => p.BookId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<BookWishlist>().HasOne(p => p.UserInfo).WithMany(b => b.BookWishlists).HasForeignKey(p => p.UserId);
+                modelBuilder.Entity<BookWishlist>().HasOne(p => p.Book).WithMany(b => b.BookWishlists).HasForeignKey(p => p.BookId);
 
             //BorrowedBook
-            modelBuilder.Entity<BorrowedBook>().HasOne(p => p.UserInfo).WithMany(b => b.BorrowedBooks).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<BorrowedBook>().HasOne(p => p.Book).WithMany(b => b.BorrowedBooks).HasForeignKey(p => p.BookId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<BorrowedBook>().HasOne(p => p.BookCopy).WithMany(b => b.BorrowBook).HasForeignKey(p => p.BookCopyId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<BorrowedBook>().HasOne(p => p.UserInfo).WithMany(b => b.BorrowedBooks).HasForeignKey(p => p.UserId);
+            modelBuilder.Entity<BorrowedBook>().HasOne(p => p.Book).WithMany(b => b.BorrowedBooks).HasForeignKey(p => p.BookId);
+            modelBuilder.Entity<BorrowedBook>().HasOne(p => p.BookCopy).WithMany(b => b.BorrowBook).HasForeignKey(p => p.BookCopyId);
 
             //fine
-            modelBuilder.Entity<Fine>().HasOne(p => p.BorrowedBook).WithMany(b => b.Fine).HasForeignKey(p => p.BorrowedBookId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Fine>().HasOne(p => p.BorrowedBook).WithMany(b => b.Fine).HasForeignKey(p => p.BorrowedBookId);
 
             //Inspection
             modelBuilder.Entity<Inspection>().HasOne(p => p.BookCopy).WithMany(b => b.Inspections).HasForeignKey(p => p.BookCopyId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Inspection>().HasOne(p => p.BorrowedBook).WithMany(b => b.Inspection).HasForeignKey(p => p.BorrowBookId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Inspection>().HasOne(p => p.BorrowedBook).WithMany(b => b.Inspection).HasForeignKey(p => p.BorrowBookId);
 
             //Shelf
-            modelBuilder.Entity<Shelf>().HasOne(p => p.BookFloor).WithMany(b => b.Shelves).HasForeignKey(p => p.BookFloorId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Shelf>().HasOne(p => p.BookFloor).WithMany(b => b.Shelves).HasForeignKey(p => p.BookFloorId);
 
             //Subcategory
-            modelBuilder.Entity<Subcategory>().HasOne(p => p.Category).WithMany(b => b.Subcategories).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Subcategory>().HasOne(p => p.Category).WithMany(b => b.Subcategories).HasForeignKey(p => p.CategoryId);
 
 
             //ApplicationUser
             modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany(p => p.Users).HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany(p => p.Users).HasForeignKey(p => p.SubscriptionId);
 
             //UserPreference
-            modelBuilder.Entity<UserPreference>().HasOne(p => p.UserInfo).WithMany(b => b.UserPreferences).HasForeignKey(p => p.UserInfoId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<UserPreference>().HasOne(p => p.Category).WithMany(b => b.UserPreferences).HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<UserPreference>().HasOne(p => p.Author).WithMany(b => b.UserPreferences).HasForeignKey(p => p.AuthorId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserPreference>().HasOne(p => p.UserInfo).WithMany(b => b.UserPreferences).HasForeignKey(p => p.UserInfoId);
+            modelBuilder.Entity<UserPreference>().HasOne(p => p.Category).WithMany(b => b.UserPreferences).HasForeignKey(p => p.CategoryId);
+            modelBuilder.Entity<UserPreference>().HasOne(p => p.Author).WithMany(b => b.UserPreferences).HasForeignKey(p => p.AuthorId);
 
 
             base.OnModelCreating(modelBuilder);
