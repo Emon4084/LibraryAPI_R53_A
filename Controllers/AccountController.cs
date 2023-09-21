@@ -26,13 +26,13 @@ namespace LibraryAPI_R53_A.Controllers
             _userManager = userManager;
         }
 
-        //[Authorize]
-        //[HttpPost("refersh-user-token")]
-        //public async Task<ActionResult<UserDto>> RefershToken()
-        //{
-        //    var user = await _userManager.FindByNameAsync(User.FindFirst(ClaimTypes.Email)?.Value);
-        //    return CreateApplicationUserDto(user);
-        //}
+        [Authorize]
+        [HttpGet("refersh-user-token")]
+        public async Task<ActionResult<UserDto>> RefershToken()
+        {
+            var user = await _userManager.FindByNameAsync(User.FindFirst(ClaimTypes.Email)?.Value);
+            return await CreateApplicationUserDto(user);
+        }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto model)
@@ -62,7 +62,7 @@ namespace LibraryAPI_R53_A.Controllers
             return await CreateApplicationUserDto(user);
         }
 
-        [HttpPost("register")]
+        [HttpPost("register")]  // /api/account/register
         public async Task<IActionResult> Register(RegisterDto model)
         {
             if(await CheckEmailExistsAsync(model.Email))

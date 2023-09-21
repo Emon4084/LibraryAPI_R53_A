@@ -4,6 +4,7 @@ using LibraryAPI_R53_A.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI_R53_A.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230921190317_ApplicationUser Table Added")]
+    partial class ApplicationUserTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +81,6 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubscriptionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(max)");
 
@@ -103,8 +102,6 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("SubscriptionId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -151,25 +148,16 @@ namespace LibraryAPI_R53_A.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"), 1L, 1);
 
-                    b.Property<string>("AgreementFileName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal?>("BookPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CoverFileName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DDCCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EBookFileName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Edition")
@@ -219,6 +207,9 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("BookId", "AuthorId");
 
                     b.HasIndex("AuthorId");
@@ -238,10 +229,6 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CallNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DDC")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -302,7 +289,7 @@ namespace LibraryAPI_R53_A.Migrations
 
                     b.HasIndex("ShelfId");
 
-                    b.ToTable("BookRacks");
+                    b.ToTable("BookRack");
                 });
 
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.BookReview", b =>
@@ -782,14 +769,6 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-
-                    b.HasOne("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", "SubscriptionPlan")
-                        .WithMany("Users")
-                        .HasForeignKey("SubscriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-
                     b.Navigation("Role");
                 });
 
@@ -798,12 +777,13 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Category", "Category")
                         .WithMany("Books")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Publisher", "Publisher")
                         .WithMany("Books")
-                        .HasForeignKey("PublisherId");
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 
@@ -815,13 +795,13 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Author", "Author")
                         .WithMany("BookAuthor")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Book", "Book")
                         .WithMany("BookAuthor")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -834,13 +814,13 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Book", "Book")
                         .WithMany("Copies")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Shelf", "Shelf")
                         .WithMany("Copies")
                         .HasForeignKey("ShelfId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -853,7 +833,7 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Shelf", "Shelf")
                         .WithMany("BookRacks")
                         .HasForeignKey("ShelfId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Shelf");
@@ -864,12 +844,13 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Book", "Book")
                         .WithMany("BookReviews")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.ApplicationUser", "UserInfo")
                         .WithMany("BookReviews")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Book");
 
@@ -880,11 +861,13 @@ namespace LibraryAPI_R53_A.Migrations
                 {
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Book", "Book")
                         .WithMany("BookWishlists")
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.ApplicationUser", "UserInfo")
                         .WithMany("BookWishlists")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Book");
 
@@ -896,16 +879,18 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.BookCopy", "BookCopy")
                         .WithMany("BorrowBook")
                         .HasForeignKey("BookCopyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Book", "Book")
                         .WithMany("BorrowedBooks")
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.ApplicationUser", "UserInfo")
                         .WithMany("BorrowedBooks")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Book");
 
@@ -919,7 +904,7 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.BorrowedBook", "BorrowedBook")
                         .WithMany("Fine")
                         .HasForeignKey("BorrowedBookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BorrowedBook");
@@ -936,7 +921,7 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.BorrowedBook", "BorrowedBook")
                         .WithMany("Inspection")
                         .HasForeignKey("BorrowBookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BookCopy");
@@ -949,7 +934,7 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.BookFloor", "BookFloor")
                         .WithMany("Shelves")
                         .HasForeignKey("BookFloorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BookFloor");
@@ -960,7 +945,7 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Category", "Category")
                         .WithMany("Subcategories")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -971,18 +956,19 @@ namespace LibraryAPI_R53_A.Migrations
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Author", "Author")
                         .WithMany("UserPreferences")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.Category", "Category")
                         .WithMany("UserPreferences")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.ApplicationUser", "UserInfo")
                         .WithMany("UserPreferences")
-                        .HasForeignKey("UserInfoId");
+                        .HasForeignKey("UserInfoId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Author");
 
@@ -1134,11 +1120,7 @@ namespace LibraryAPI_R53_A.Migrations
 
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", b =>
                 {
-
                     b.Navigation("SubscriptonUsers");
-
-                    b.Navigation("Users");
-
                 });
 #pragma warning restore 612, 618
         }

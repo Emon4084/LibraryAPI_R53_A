@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LibraryAPI_R53_A.Core.Entities;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
@@ -11,6 +12,6 @@ namespace LibraryAPI_R53_A.Core.Domain
         public decimal PlanPrice { get; set; }
         public bool IsActive { get; set; }
         [JsonIgnore]
-        public ICollection<ApplicationUser>? Users { get; set; }
+        public ICollection<SubscriptionUser>? SubscriptonUsers { get; set; }
     }
 }
