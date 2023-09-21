@@ -1,6 +1,7 @@
 using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.Core.Interfaces;
 using LibraryAPI_R53_A.Core.Repositories;
+using LibraryAPI_R53_A.Helpers;
 using LibraryAPI_R53_A.Persistence;
 using LibraryAPI_R53_A.Persistence.Repositories;
 using LibraryAPI_R53_A.Persistence.services;
@@ -8,8 +9,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Net.NetworkInformation;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -114,10 +117,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 #endregion 
 
 //DI
-builder.Services.AddTransient<IPublisher, PublisherRepository>();
-builder.Services.AddTransient<ISubscriptionPlan, SubsPlanRepository>();
-builder.Services.AddTransient<ICategory, CategoryRepository>();
-builder.Services.AddTransient<IRepository<BookFloor>, BookFloorRepository>();
+builder.Services.AddScoped<IPublisher, PublisherRepository>();
+builder.Services.AddScoped<ISubscriptionPlan, SubsPlanRepository>();
+builder.Services.AddScoped<ICategory, CategoryRepository>();
+builder.Services.AddScoped<IBook, BookRepository>();
+builder.Services.AddScoped<IAuthor, AuthorRepository>();
+builder.Services.AddScoped<IBookCopy, BookCopyRepository>();
+builder.Services.AddScoped<IRepository<BookFloor>, BookFloorRepository>();
+builder.Services.AddScoped<IRepository<Shelf>, ShelfRepository>();
+builder.Services.AddScoped<IRepository<Subcategory>, SubcategoryRepository>();
 
 builder.Services.AddAuthorization(opt =>
 {
@@ -142,6 +150,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//for files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot", "uploads")),
+    RequestPath="/uploads"
+});
 
 // Step 06   -- app.UseAuthentication();
 app.UseAuthentication();

@@ -40,7 +40,7 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(model);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Edit(BookFloor bookFloor)
         {
             // bookFloor = await _repo.Get(id);
@@ -57,7 +57,7 @@ namespace LibraryAPI_R53_A.Controllers
         {
 
             await _repo.Delete(id);
-            return Ok("Deleted");
+            return Ok(new { message = "Deleted successfully" });
         }
 
     }

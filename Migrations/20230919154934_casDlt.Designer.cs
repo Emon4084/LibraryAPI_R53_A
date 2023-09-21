@@ -4,6 +4,7 @@ using LibraryAPI_R53_A.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI_R53_A.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230919154934_casDlt")]
+    partial class casDlt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -619,29 +621,6 @@ namespace LibraryAPI_R53_A.Migrations
                     b.ToTable("UserPreferences");
                 });
 
-            modelBuilder.Entity("LibraryAPI_R53_A.Core.Entities.SubscriptionUser", b =>
-                {
-                    b.Property<int>("SubscriptonUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptonUserId"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SubscriptionPlanId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SubscriptonUserId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("SubscriptionPlanId");
-
-                    b.ToTable("SubscriptionUsers");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -782,15 +761,15 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", "SubscriptionPlan")
                         .WithMany("Users")
                         .HasForeignKey("SubscriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-
                     b.Navigation("Role");
+
+                    b.Navigation("SubscriptionPlan");
                 });
 
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.Book", b =>
@@ -991,23 +970,6 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Navigation("UserInfo");
                 });
 
-            modelBuilder.Entity("LibraryAPI_R53_A.Core.Entities.SubscriptionUser", b =>
-                {
-                    b.HasOne("LibraryAPI_R53_A.Core.Domain.ApplicationUser", "ApplicationUser")
-                        .WithMany("SubscriptonUsers")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", "SubscriptionPlan")
-                        .WithMany("SubscriptonUsers")
-                        .HasForeignKey("SubscriptionPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("SubscriptionPlan");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1066,8 +1028,6 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Navigation("BookWishlists");
 
                     b.Navigation("BorrowedBooks");
-
-                    b.Navigation("SubscriptonUsers");
 
                     b.Navigation("UserPreferences");
                 });
@@ -1134,11 +1094,7 @@ namespace LibraryAPI_R53_A.Migrations
 
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", b =>
                 {
-
-                    b.Navigation("SubscriptonUsers");
-
                     b.Navigation("Users");
-
                 });
 #pragma warning restore 612, 618
         }
