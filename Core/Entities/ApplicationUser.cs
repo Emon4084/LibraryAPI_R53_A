@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LibraryAPI_R53_A.Core.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,8 +18,10 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? ProfileImage { get; set; }
         [NotMapped]
         public IFormFile? UserImage { get; set; }
-        public int SubscriptionId { get; set; }
-        public SubscriptionPlan? SubscriptionPlan { get; set; }
+        //public int SubscriptionId { get; set; }
+        //public SubscriptionPlan? SubscriptionPlan { get; set; }
+        [JsonIgnore]
+        public ICollection<SubscriptionUser>? SubscriptonUsers { get; set; }
         public virtual List<UserPreference> UserPreferences { get; set; } = new List<UserPreference>();
         [JsonIgnore]
         public ICollection<BookReview>? BookReviews { get; set; }

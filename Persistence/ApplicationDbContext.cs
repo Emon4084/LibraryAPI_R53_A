@@ -1,4 +1,5 @@
 ﻿using LibraryAPI_R53_A.Core.Domain;
+using LibraryAPI_R53_A.Core.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ namespace LibraryAPI_R53_A.Persistence
         public DbSet<Shelf> Shelfs { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<SubscriptionUser> SubscriptionUsers { get; set; }
 
         //public DbSet<ApplicationUser> UserInfos { get; set; }
         public DbSet<UserPreference> UserPreferences { get; set; }
@@ -61,6 +63,19 @@ namespace LibraryAPI_R53_A.Persistence
                     .WithMany(e=>e.BookAuthor)
                     .HasForeignKey(e => e.AuthorId).OnDelete(DeleteBehavior.Restrict);
             });
+
+            // Subscription USEr
+            modelBuilder.Entity<SubscriptionUser>()
+                .HasOne(e => e.ApplicationUser)
+                 .WithMany(e => e.SubscriptonUsers)
+                 .HasForeignKey(e => e.ApplicationUserId);
+
+
+            modelBuilder.Entity<SubscriptionUser>()
+                .HasOne(e => e.SubscriptionPlan)
+                    .WithMany(e => e.SubscriptonUsers)
+                    .HasForeignKey(e => e.SubscriptionPlanId);
+
 
             //BookCopy
             modelBuilder.Entity<BookCopy>().HasOne(p => p.Book).WithMany(b => b.Copies).HasForeignKey(p => p.BookId).OnDelete(DeleteBehavior.Restrict);
@@ -98,7 +113,7 @@ namespace LibraryAPI_R53_A.Persistence
 
             //ApplicationUser
             modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany(p => p.Users).HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ApplicationUser>().HasOne(p => p.SubscriptionPlan).WithMany(p => p.Users).HasForeignKey(p => p.SubscriptionId).OnDelete(DeleteBehavior.Restrict);
 
             //UserPreference
             modelBuilder.Entity<UserPreference>().HasOne(p => p.UserInfo).WithMany(b => b.UserPreferences).HasForeignKey(p => p.UserInfoId).OnDelete(DeleteBehavior.Restrict);
