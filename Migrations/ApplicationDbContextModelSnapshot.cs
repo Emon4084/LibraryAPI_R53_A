@@ -79,9 +79,6 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubscriptionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(max)");
 
@@ -103,8 +100,6 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("SubscriptionId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -782,14 +777,6 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-
-                    b.HasOne("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", "SubscriptionPlan")
-                        .WithMany("Users")
-                        .HasForeignKey("SubscriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-
                     b.Navigation("Role");
                 });
 
@@ -994,7 +981,7 @@ namespace LibraryAPI_R53_A.Migrations
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Entities.SubscriptionUser", b =>
                 {
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.ApplicationUser", "ApplicationUser")
-                        .WithMany("SubscriptonUsers")
+                        .WithMany("SubscriptionUsers")
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", "SubscriptionPlan")
@@ -1067,7 +1054,7 @@ namespace LibraryAPI_R53_A.Migrations
 
                     b.Navigation("BorrowedBooks");
 
-                    b.Navigation("SubscriptonUsers");
+                    b.Navigation("SubscriptionUsers");
 
                     b.Navigation("UserPreferences");
                 });
@@ -1134,11 +1121,7 @@ namespace LibraryAPI_R53_A.Migrations
 
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.SubscriptionPlan", b =>
                 {
-
                     b.Navigation("SubscriptonUsers");
-
-                    b.Navigation("Users");
-
                 });
 #pragma warning restore 612, 618
         }
