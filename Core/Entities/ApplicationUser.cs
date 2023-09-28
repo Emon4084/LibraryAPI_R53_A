@@ -9,8 +9,8 @@ namespace LibraryAPI_R53_A.Core.Domain
 {
     public class ApplicationUser : IdentityUser
     {
-        public string? RoleId { get; set; }
-        public IdentityRole? Role { get; set; }
+        //public string? RoleId { get; set; }
+        //public IdentityRole? Role { get; set; }
 
 
         public bool IsActive { get; set; }

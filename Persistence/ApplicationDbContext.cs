@@ -116,7 +116,7 @@ namespace LibraryAPI_R53_A.Persistence
 
 
             //ApplicationUser
-            modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ApplicationUser>().HasOne(p => p.Role).WithMany().HasForeignKey(p => p.RoleId).OnDelete(DeleteBehavior.Restrict);
 
 
             //UserPreference

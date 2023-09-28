@@ -68,6 +68,17 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return copies;
         }
 
+        public async Task<BookCopy> GetAvailable(int? bookId)
+        {
+            var av = await _context.Copies
+                .FirstOrDefaultAsync(c => c.BookId == bookId && c.IsAvailable==true);
+            if (av!=null)
+            {
+                return av;
+            }
+            return null;
+        }
+
 
         public IEnumerable<BookCopy> GoodCondition()
         {
@@ -91,5 +102,18 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                          select b;
             return copies;
         }
+
+        public async Task ChangeAvailability(int id, bool isAvailable)
+        {
+            var bookCopy = await _context.Copies.FindAsync(id);
+            if (bookCopy != null)
+            {
+                bookCopy.IsAvailable = isAvailable;
+                _context.Copies.Update(bookCopy);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
     }
 }

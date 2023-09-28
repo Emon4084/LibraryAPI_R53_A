@@ -122,6 +122,7 @@ builder.Services.AddScoped<ISubscriptionPlan, SubsPlanRepository>();
 builder.Services.AddScoped<ICategory, CategoryRepository>();
 builder.Services.AddScoped<IBook, BookRepository>();
 builder.Services.AddScoped<IAuthor, AuthorRepository>();
+builder.Services.AddScoped<IBorrowBook, BorrowedBookRepository>();
 builder.Services.AddScoped<IBookCopy, BookCopyRepository>();
 builder.Services.AddScoped<IRepository<BookFloor>, BookFloorRepository>();
 builder.Services.AddScoped<IRepository<Shelf>, ShelfRepository>();
