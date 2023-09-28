@@ -8,5 +8,7 @@ namespace LibraryAPI_R53_A.Core.Interfaces
         IEnumerable<BookCopy> GetDamaged();
         IEnumerable<BookCopy> GotToRepair();
         IEnumerable<BookCopy> GoodCondition();
+        Task<BookCopy> GetAvailable(int? bookId);
+        Task ChangeAvailability(int id, bool isAvailable);
     }
 }
