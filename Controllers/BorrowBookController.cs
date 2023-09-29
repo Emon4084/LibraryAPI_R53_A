@@ -119,6 +119,13 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
+        //admin approval using patch
+        //admin controller to cancel
+
+
+        //admin inspect, received and fine book
+        
+
 
     }
 }
