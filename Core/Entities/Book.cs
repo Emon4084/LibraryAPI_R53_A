@@ -22,7 +22,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public decimal? BookPrice { get; set; }
         //[JsonIgnore]
         [NotMapped]
-        public decimal? RentPrice
+        public decimal? RefundPrice
         {
             get
             {
@@ -53,6 +53,10 @@ namespace LibraryAPI_R53_A.Core.Domain
         public int CategoryId { get; set; }
         [JsonIgnore]
         public Category? Category { get; set; }
+
+        //public int SubcategoryId { get; set; }
+        //[JsonIgnore]
+        //public Subcategory? Subcategory { get; set; }
 
         public ICollection<BookAuthor>? BookAuthor { get; set; }
         [JsonIgnore]

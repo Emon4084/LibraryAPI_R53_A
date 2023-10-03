@@ -4,12 +4,14 @@ using LibraryAPI_R53_A.Persistence.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace LibraryAPI_R53_A.Controllers
 {
-    [Authorize]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BorrowBookController : ControllerBase
@@ -26,6 +28,7 @@ namespace LibraryAPI_R53_A.Controllers
             _bCR = bCR;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("all-borrowlist")]
         public async Task<IActionResult> GetBorrowedList()
         {
@@ -35,7 +38,7 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("requested-books/{username}")]
         public async Task<IActionResult> GetRequestedBooksByUserName(string username)
         {
@@ -58,6 +61,7 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("cancelled-books")]
         public async Task<IActionResult> GetCancelledBooksByUserName()
         {
@@ -73,7 +77,7 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin, User")]
         [HttpPost("book-request")]
         public async Task<IActionResult> SendBookRequest(BorrowedBook borrowedBook)
         {
@@ -105,7 +109,7 @@ namespace LibraryAPI_R53_A.Controllers
 
                 };
 
-                await _bR.CreateBorrowBook(borrowedBook);
+                await _bR.Post(borrowedBook);
                 await _bCR.ChangeAvailability(availablebookCopies.BookCopyId, false);
 
 
@@ -119,12 +123,29 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
-        //admin approval using patch
+        
+        [Authorize(Roles ="Admin")]
+        [HttpPut("Approve/{borrowedBookId}")]
+        public async Task<IActionResult> ApproveBorrowedBook(int borrowedBookId)
+        {
+            var borrowedBook = await _bR.Get(borrowedBookId);
+
+            if (borrowedBook == null)
+            {
+                return NotFound(); 
+            }
+
+            await _bR.ApproveBorrowedBookAsync(borrowedBook);
+          
+
+            return Ok(borrowedBook); 
+        }
+
         //admin controller to cancel
 
 
         //admin inspect, received and fine book
-        
+
 
 
     }
