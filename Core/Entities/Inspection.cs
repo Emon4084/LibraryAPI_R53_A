@@ -1,4 +1,6 @@
-﻿namespace LibraryAPI_R53_A.Core.Domain
+﻿using System.Text.Json.Serialization;
+
+namespace LibraryAPI_R53_A.Core.Domain
 {
     public class Inspection
     {
@@ -6,8 +8,10 @@
         public string? Comment { get; set; }
         public bool IsActive { get; set; }
         public int BookCopyId { get; set; }
+        [JsonIgnore]
         public BookCopy? BookCopy { get; set; }
         public int BorrowBookId { get; set; }
+        [JsonIgnore]
         public BorrowedBook? BorrowedBook { get; set; }
     }
 }

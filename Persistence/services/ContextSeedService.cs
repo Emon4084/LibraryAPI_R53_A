@@ -234,9 +234,9 @@ namespace LibraryAPI_R53_A.Persistence.services
                         Edition = "1st Edition",
                         TotalCopies = 2,
                         Language = "English",
-                        Description = "The Adventures of Sherlock Holmes is a collection of twelve short        stories     " +
-                                      "featuring Sherlock Holmes, a fictional detective. The stories are     the     " +
-                                      "first appearance of Holmes in book form and are widely considered        some of     " +
+                        Description = "The Adventures of Sherlock Holmes is a collection of twelve short        stories " +
+                                      "featuring Sherlock Holmes, a fictional detective. The stories are     the " +
+                                      "first appearance of Holmes in book form and are widely considered        some of " +
                                       "the finest short stories in the mystery genre.",
                         BookPrice = 700.00M,
                         DDCCode = "Fiction(823.8)",
@@ -262,7 +262,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                 {
                     new BookCopy
                     {
-                        CallNumber = "11-823.8-T-11",
+                        CallNumber = "11-823.8-T-1",
                         IsAvailable = true,
                         IsActive = true,
                         condition = BookCondition.Good,

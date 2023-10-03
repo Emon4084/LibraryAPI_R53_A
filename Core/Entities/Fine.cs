@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Domain
 {
@@ -7,6 +8,7 @@ namespace LibraryAPI_R53_A.Core.Domain
 
         public int FineId { get; set; }
         public int BorrowedBookId { get; set; }
+        [JsonIgnore]
         public BorrowedBook? BorrowedBook { get; set; }
         public decimal FineAmount { get; set; }
         public DateTime? PaidDate { get; set; }

@@ -1,5 +1,7 @@
 ﻿using LibraryAPI_R53_A.Core.Domain;
 using LibraryAPI_R53_A.Core.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI_R53_A.Persistence.Repositories
@@ -12,10 +14,20 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task CreateBorrowBook(BorrowedBook borrowedBook)
+        //public async Task CreateBorrowBook(BorrowedBook borrowedBook)
+        //{
+        //   _context.BorrowedBooks.Add(borrowedBook);
+        //    await _context.SaveChangesAsync();
+        //}
+        public async Task<BorrowedBook?> Post(BorrowedBook borrowedBook)
         {
-           _context.BorrowedBooks.Add(borrowedBook);
+            _context.BorrowedBooks.Add(borrowedBook);
             await _context.SaveChangesAsync();
+            return borrowedBook;
+        }
+        public Task Put(BorrowedBook entities)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<BorrowedBook>> GetAllRequestedBooksByUserName(string userName)
@@ -44,19 +56,25 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public Task<BorrowedBook?> Get(int id)
+        public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
         {
-            throw new NotImplementedException();
+           
+            borrowedBook.BorrowDate = DateTime.UtcNow;
+            borrowedBook.DueDate = DateTime.UtcNow.AddDays(7);
+
+
+            borrowedBook.Status = "Approved";
+
+            await _context.SaveChangesAsync();
+
+            return borrowedBook; 
         }
 
-        public Task<BorrowedBook?> Post(BorrowedBook entity)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task Put(BorrowedBook entities)
+        public async Task<BorrowedBook?> Get(int id)
         {
-            throw new NotImplementedException();
+            var bR = await _context.BorrowedBooks.FindAsync(id);
+            return bR;
         }
 
         public Task Delete(int id)

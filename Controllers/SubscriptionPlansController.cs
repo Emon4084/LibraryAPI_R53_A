@@ -10,11 +10,11 @@ namespace LibraryAPI_R53_A.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class subscriptionPlansController : ControllerBase
+    public class SubscriptionPlansController : ControllerBase
     {
         private ISubscriptionPlan _subscriptionPlan;
         private readonly IMapper _mapper;
-        public subscriptionPlansController(ISubscriptionPlan subscriptionPlan, IMapper map)
+        public SubscriptionPlansController(ISubscriptionPlan subscriptionPlan, IMapper map)
         {
             _subscriptionPlan = subscriptionPlan;
             _mapper = map;
