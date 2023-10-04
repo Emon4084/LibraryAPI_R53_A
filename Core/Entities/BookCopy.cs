@@ -22,7 +22,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public int BookId { get; set; }
         [JsonIgnore]
         public Book? Book { get; set; }
-        public string DDC { get; set; }
+        public string? DDC { get; set; }
         public int ShelfId { get; set; }
         [JsonIgnore]
         public Shelf? Shelf { get; set; }

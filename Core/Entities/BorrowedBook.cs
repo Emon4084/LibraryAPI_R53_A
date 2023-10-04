@@ -19,12 +19,16 @@ namespace LibraryAPI_R53_A.Core.Domain
         //in frontend get call number by this id
         [JsonIgnore]
         public BookCopy? BookCopy { get; set; }
+        public DateTime? RequestTimestamp { get; set; }
+
         public DateTime? BorrowDate { get; set; }
         public DateTime? DueDate { get; set; }
         public string? Status { get; set; }
         //public bool IsReturned { get; set; }
         public bool IsActive { get; set; }
         public DateTime? ActualReturnDate { get; set; }
+
+        public string? Comment { get; set; } //reason for cancellation
         [JsonIgnore]
         public ICollection<Inspection>? Inspection { get; set; }
         [JsonIgnore]
