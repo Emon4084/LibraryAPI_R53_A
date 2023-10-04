@@ -19,9 +19,6 @@ namespace LibraryAPI_R53_A.Controllers
         private readonly IBorrowBook _bR;
         private readonly IBookCopy _bCR;
 
-        //fine and inspection data will be handle in _br to catch the dbcontext
-
-
         public BorrowBookController(IBorrowBook bR, IBookCopy bCR)
         {
             _bR = bR;
@@ -38,7 +35,7 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("requested-books/{username}")]
         public async Task<IActionResult> GetRequestedBooksByUserName(string username)
         {
@@ -61,14 +58,39 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("cancelled-books")]
-        public async Task<IActionResult> GetCancelledBooksByUserName()
+        [Authorize(Roles = "Admin, User")]
+        [HttpGet("all-request/{username}")]
+        public async Task<IActionResult> GetAllRequestByUserName(string username)
         {
             try
             {
 
-                var cancelledBooks = await _bR.GetAllCancelledBooksByUserName();
+                var requestedBooks = await _bR.GetAllByUserName(username);
+
+                if (requestedBooks == null)
+                {
+                    return NotFound("No requested books found for the user.");
+                }
+
+
+                return Ok(requestedBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("cancelled-books")]
+        public async Task<IActionResult> GetCancelledBooks()
+        {
+            try
+            {
+
+                var cancelledBooks = await _bR.GetAllCancelledBooks();
                 return Ok(cancelledBooks);
             }
             catch (Exception ex)
@@ -77,13 +99,31 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("approved-books")]
+        public async Task<IActionResult> GetApprovedBooks()
+        {
+            try
+            {
+
+                var approvedBooks = await _bR.GetAllApprovedBooks();
+                return Ok(approvedBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+
+
+
+
         [Authorize(Roles = "Admin, User")]
         [HttpPost("book-request")]
         public async Task<IActionResult> SendBookRequest(BorrowedBook borrowedBook)
         {
             try
             {
-                //only after login uId will get logged in user by this line of code
                 var uId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (string.IsNullOrEmpty(uId))
@@ -104,6 +144,7 @@ namespace LibraryAPI_R53_A.Controllers
                     UserId = uId,
                     BookId = borrowedBook.BookId,
                     BookCopyId = availablebookCopies.BookCopyId,
+                    RequestTimestamp= DateTime.Now,
                     Status = "Requested",
                     IsActive = true
 
@@ -136,12 +177,31 @@ namespace LibraryAPI_R53_A.Controllers
             }
 
             await _bR.ApproveBorrowedBookAsync(borrowedBook);
-          
+           
+            await _bCR.ChangeAvailability(borrowedBook.BookCopyId, false);
+
 
             return Ok(borrowedBook); 
         }
 
-        //admin controller to cancel
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Cancel/{borrowedBookId}")]
+        public async Task<IActionResult> CancelBorrowedBook(int borrowedBookId, string comment)
+        {
+            var borrowedBook = await _bR.Get(borrowedBookId);
+
+            if (borrowedBook == null)
+            {
+                return NotFound();
+            }
+
+            borrowedBook.Comment = comment;
+            await _bR.CancelBorrowedBookAsync(borrowedBook);
+            await _bCR.ChangeAvailability(borrowedBook.BookCopyId, true);
+
+
+            return Ok(borrowedBook);
+        }
 
 
         //admin inspect, received and fine book

@@ -14,20 +14,12 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
         {
             _context = context;
         }
-        //public async Task CreateBorrowBook(BorrowedBook borrowedBook)
-        //{
-        //   _context.BorrowedBooks.Add(borrowedBook);
-        //    await _context.SaveChangesAsync();
-        //}
+      
         public async Task<BorrowedBook?> Post(BorrowedBook borrowedBook)
         {
             _context.BorrowedBooks.Add(borrowedBook);
             await _context.SaveChangesAsync();
             return borrowedBook;
-        }
-        public Task Put(BorrowedBook entities)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<BorrowedBook>> GetAllRequestedBooksByUserName(string userName)
@@ -37,9 +29,27 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 .Include(b => b.BookCopy)
                 .Where(b => b.UserInfo.UserName == userName && b.Status == "Requested")
                 .ToListAsync();
+        }
 
-        } 
-        public async Task<IEnumerable<BorrowedBook>> GetAllCancelledBooksByUserName()
+        public async Task<IEnumerable<BorrowedBook>> GetAllByUserName(string userName)
+        {
+            return await _context.BorrowedBooks
+                .Include(b => b.Book)
+                .Include(b => b.BookCopy)
+                .Where(b => b.UserInfo.UserName == userName)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<BorrowedBook>> GetAllApprovedBooks()
+        {
+            return await _context.BorrowedBooks
+                .Include(b => b.Book)
+                .Include(b => b.BookCopy)
+                .Where(b => b.Status == "Approved")
+                .ToListAsync();
+
+        }
+
+        public async Task<IEnumerable<BorrowedBook>> GetAllCancelledBooks()
         {
             return await _context.BorrowedBooks
                 .Include(b => b.Book)
@@ -58,18 +68,27 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
         {
-           
             borrowedBook.BorrowDate = DateTime.UtcNow;
             borrowedBook.DueDate = DateTime.UtcNow.AddDays(7);
 
-
             borrowedBook.Status = "Approved";
+            borrowedBook.Comment = "";
+           
 
             await _context.SaveChangesAsync();
 
             return borrowedBook; 
         }
+        public async Task<BorrowedBook> CancelBorrowedBookAsync(BorrowedBook borrowedBook)
+        {
+           
+            borrowedBook.DueDate = null;
+            borrowedBook.Status = "Cancelled";
 
+            await _context.SaveChangesAsync();
+
+            return borrowedBook;
+        }
 
         public async Task<BorrowedBook?> Get(int id)
         {
@@ -93,6 +112,10 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
         }
 
         public IEnumerable<BorrowedBook> GetInactive()
+        {
+            throw new NotImplementedException();
+        }
+        public Task Put(BorrowedBook entities)
         {
             throw new NotImplementedException();
         }
