@@ -68,8 +68,8 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
         {
-            borrowedBook.BorrowDate = DateTime.UtcNow;
-            borrowedBook.DueDate = DateTime.UtcNow.AddDays(7);
+            borrowedBook.BorrowDate = DateTime.Now;
+            borrowedBook.DueDate = DateTime.Now.AddDays(7);
 
             borrowedBook.Status = "Approved";
             borrowedBook.Comment = "";
