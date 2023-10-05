@@ -18,6 +18,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHostedService<ApprovalExpirationService>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
