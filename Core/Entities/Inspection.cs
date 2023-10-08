@@ -6,7 +6,7 @@ namespace LibraryAPI_R53_A.Core.Domain
     {
         public int InspectionId { get; set; }
         public string? Comment { get; set; }
-        public bool IsActive { get; set; }
+        //public bool IsActive { get; set; }
         public int BookCopyId { get; set; }
         [JsonIgnore]
         public BookCopy? BookCopy { get; set; }

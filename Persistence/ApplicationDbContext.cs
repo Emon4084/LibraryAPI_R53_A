@@ -39,6 +39,8 @@ namespace LibraryAPI_R53_A.Persistence
         public DbSet<UserPreference> UserPreferences { get; set; }
         public DbSet<BookWishlist> BookWishlists { get; set; }
 
+        public DbSet<Invoice> Invoices { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Author>(entity =>
@@ -68,7 +70,7 @@ namespace LibraryAPI_R53_A.Persistence
                     .HasForeignKey(e => e.AuthorId);
             });
 
-            // Subscription USEr
+            // Subscription User
             modelBuilder.Entity<SubscriptionUser>()
                 .HasOne(e => e.ApplicationUser)
                  .WithMany(e => e.SubscriptionUsers)
@@ -123,6 +125,11 @@ namespace LibraryAPI_R53_A.Persistence
             modelBuilder.Entity<UserPreference>().HasOne(p => p.UserInfo).WithMany(b => b.UserPreferences).HasForeignKey(p => p.UserInfoId);
             modelBuilder.Entity<UserPreference>().HasOne(p => p.Category).WithMany(b => b.UserPreferences).HasForeignKey(p => p.CategoryId);
             modelBuilder.Entity<UserPreference>().HasOne(p => p.Author).WithMany(b => b.UserPreferences).HasForeignKey(p => p.AuthorId);
+
+            //Invoice
+            //modelBuilder.Entity<Invoice>().HasOne(i => i.BorrowedBook).WithMany().HasForeignKey(b => b.BorrowId);
+            //modelBuilder.Entity<Invoice>().HasOne(i => i.User).WithMany().HasForeignKey(b => b.UserId);
+            //modelBuilder.Entity<Invoice>().HasOne(i => i.Plan).WithMany().HasForeignKey(b => b.SubId);
 
 
             base.OnModelCreating(modelBuilder);

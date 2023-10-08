@@ -190,7 +190,8 @@ namespace LibraryAPI_R53_A.Persistence.services
                         PlanName = "Basic Plan",
                         PlanDescription = "Can borrow Book that are less than 1000",
                         PlanPrice = 1000.00M,
-                        IsActive = true
+                        IsActive = true,
+                        MonthlyFee = 200M
                     }
                 };
                 _context.SubscriptionPlans.AddRange(subscriptionPlans);

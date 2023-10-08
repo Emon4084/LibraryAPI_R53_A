@@ -36,10 +36,6 @@ namespace LibraryAPI_R53_A.Core.Domain
                 }
             }
         }
-
-
-
-        //calculative field
         public string? DDCCode { get; set; }
         public bool IsActive { get; set; }
         [NotMapped]
