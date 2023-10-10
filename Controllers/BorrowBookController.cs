@@ -35,7 +35,7 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("requested-books/{username}")]
         public async Task<IActionResult> GetRequestedBooksByUserName(string username)
         {
@@ -164,7 +164,17 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
-        
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> BooksShow()
+        {
+            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) { return BadRequest(); }
+            var a = await _bR.GetAllRequestedBooksByUserId(userId);
+            return Ok(a);
+
+        }
+
         [Authorize(Roles ="Admin")]
         [HttpPut("Approve/{borrowedBookId}")]
         public async Task<IActionResult> ApproveBorrowedBook(int borrowedBookId)

@@ -15,5 +15,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public decimal? MonthlyFee { get; set; }//new added
         [JsonIgnore]
         public ICollection<SubscriptionUser>? SubscriptonUsers { get; set; }
+        [JsonIgnore]
+        public ICollection<Invoice>? Invoices { get; set; }
     }
 }

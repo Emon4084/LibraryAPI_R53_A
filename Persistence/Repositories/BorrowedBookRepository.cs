@@ -31,6 +31,16 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<BorrowedBook>> GetAllRequestedBooksByUserId(string userId)
+        {
+            return await _context.BorrowedBooks
+                .Include(b => b.Book)
+                .Include(b => b.BookCopy)
+                .Where(b => b.UserInfo.Id == userId)
+                .ToListAsync();
+        }
+
+
         public async Task<IEnumerable<BorrowedBook>> GetAllByUserName(string userName)
         {
             return await _context.BorrowedBooks
@@ -95,6 +105,8 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             var bR = await _context.BorrowedBooks.FindAsync(id);
             return bR;
         }
+
+        
 
         public Task Delete(int id)
         {

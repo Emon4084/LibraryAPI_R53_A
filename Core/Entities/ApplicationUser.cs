@@ -30,6 +30,8 @@ namespace LibraryAPI_R53_A.Core.Domain
         public ICollection<BorrowedBook>? BorrowedBooks { get; set;}
         [JsonIgnore]
         public ICollection<BookWishlist>? BookWishlists { get; set; }
+        [JsonIgnore]
+        public ICollection<Invoice>? Invoices { get; set; }
     }
 }
 
