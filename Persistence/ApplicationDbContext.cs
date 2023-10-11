@@ -128,9 +128,8 @@ namespace LibraryAPI_R53_A.Persistence
 
             //Invoice
             modelBuilder.Entity<Invoice>().HasOne(i => i.BorrowedBook).WithMany().HasForeignKey(b => b.BorrowId);
-            modelBuilder.Entity<Invoice>().HasOne(i => i.User).WithMany().HasForeignKey(b => b.UserId);
-            modelBuilder.Entity<Invoice>().HasOne(i => i.Plan).WithMany().HasForeignKey(b => b.SubId);
-
+            modelBuilder.Entity<Invoice>().HasOne(i => i.User).WithMany(i=>i.Invoices).HasForeignKey(b => b.UserId);
+            
 
             base.OnModelCreating(modelBuilder);
         }

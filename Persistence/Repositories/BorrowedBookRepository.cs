@@ -78,16 +78,17 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
         {
-            borrowedBook.BorrowDate = DateTime.Now;
-            borrowedBook.DueDate = DateTime.Now.AddDays(7);
+            //borrowedBook.BorrowDate = DateTime.Now;
+            //borrowedBook.DueDate = DateTime.Now.AddDays(7);
 
-            borrowedBook.Status = "Approved";
-            borrowedBook.Comment = "";
-           
+            //borrowedBook.Status = "Approved";
+            //borrowedBook.Comment = "";
+            //borrowedBook.Invoices
 
-            await _context.SaveChangesAsync();
 
-            return borrowedBook; 
+            //await _context.SaveChangesAsync();
+
+            return borrowedBook;
         }
         public async Task<BorrowedBook> CancelBorrowedBookAsync(BorrowedBook borrowedBook)
         {
@@ -100,13 +101,21 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return borrowedBook;
         }
 
+        public async Task<BorrowedBook> ReturnBook(BorrowedBook borrowedBook)
+        {
+            borrowedBook.ActualReturnDate = DateTime.Now;
+            borrowedBook.Status = "Returned";
+            await _context.SaveChangesAsync();
+            return borrowedBook;
+        } 
+
         public async Task<BorrowedBook?> Get(int id)
         {
             var bR = await _context.BorrowedBooks.FindAsync(id);
             return bR;
         }
 
-        
+       
 
         public Task Delete(int id)
         {
