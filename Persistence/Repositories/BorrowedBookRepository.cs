@@ -138,13 +138,13 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             //bool isSubscribedUser = borrowedBook.UserInfo.IsSubscribed;
 
             var invoice = new Invoice();
-            if (borrowedBook.UserInfo?.IsSubscribed==true)
+            if (borrowedBook.UserInfo?.IsSubscribed == true)
             {
 
                 invoice.BorrowedBook = borrowedBook;
                 invoice.UserId = borrowedBook.UserId;
-                invoice.Payment = 0; 
-                invoice.Refund = 0; 
+                invoice.Payment = 0;
+                invoice.Refund = 0;
                 invoice.TransactionDate = DateTime.Now;
 
             }
@@ -153,8 +153,8 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
                 invoice.BorrowedBook = borrowedBook;
                 invoice.UserId = borrowedBook.UserId;
-                invoice.Payment = borrowedBook?.Book?.BookPrice?? 0M;
-                invoice.Refund = borrowedBook?.Book?.BookPrice * 0.7m?? 0M;
+                invoice.Payment = (decimal)borrowedBook.Book.BookPrice;
+                invoice.Refund = borrowedBook?.Book?.BookPrice * 0.7m;
                 invoice.TransactionDate = DateTime.Now;
 
             }
@@ -180,47 +180,47 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<BorrowedBook> ReturnBook(BorrowedBook borrowedBook)
         {
-            if (borrowedBook == null || borrowedBook.ActualReturnDate == null)
-            {
-                throw new InvalidOperationException("BorrowedBook and ActualReturnDate must have valid values.");
-            }
+            borrowedBook.DueDate = borrowedBook.DueDate;
+            borrowedBook.ActualReturnDate = DateTime.Now;
+            borrowedBook.Status = "Returned";
+
 
             // Calculate the fine amount
             var fineCalculator = new FineCalculator();
             decimal fineAmount = fineCalculator.CalculateFine(borrowedBook);
 
-            // Update the BorrowedBook properties
-            borrowedBook.ActualReturnDate = DateTime.Now;
-            borrowedBook.Status = "Returned";
+
 
             // Find the corresponding invoice
             var invoice = await _context.Invoices.FirstOrDefaultAsync(i => i.BorrowId == borrowedBook.BorrowedBookId);
 
             if (invoice != null)
             {
-                if (borrowedBook.UserInfo.IsSubscribed)
+                if (borrowedBook.UserInfo?.IsSubscribed == true)
                 {
                     // Subscribed user: Pay only the fine (if available) and update the invoice
                     if (fineAmount > 0)
                     {
                         invoice.Fine = fineAmount;
                         invoice.Payment = fineAmount;
+                        invoice.TransactionDate= DateTime.Now;
                     }
                 }
                 else
                 {
-                    // Pay-per-borrow user: Calculate the refund and update the invoice
-                    decimal payment = (decimal)borrowedBook.Book.BookPrice; // Assuming there is a 'Price' property in the Book entity
+                    
+                    decimal payment = (decimal)borrowedBook.Book.BookPrice; 
 
-                    // Calculate the refund as the payment amount minus the fine
+                   
                     decimal refund = payment - fineAmount;
 
-                    // Ensure refund is non-negative
-                    refund = Math.Max(0, refund);
+                    // Ensuring refund is non-negative
+                    refund = Math.Max(0, payment*0.7M);
 
                     invoice.Fine = fineAmount;
                     invoice.Payment = payment;
                     invoice.Refund = refund;
+                    invoice.TransactionDate = DateTime.Now;
                 }
 
                 // Save changes to the database
@@ -232,9 +232,12 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
         public async Task<BorrowedBook?> Get(int id)
         {
-            var bR = await _context.BorrowedBooks.FindAsync(id);
-            return bR;
+            var borrowedBook = await _context.BorrowedBooks
+   .Include(b => b.UserInfo)
+   .Include(bb=>bb.Book).FirstOrDefaultAsync(b => b.BorrowedBookId == id);
+            return borrowedBook;
         }
+
 
 
 
