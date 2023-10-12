@@ -15,6 +15,21 @@ namespace LibraryAPI_R53_A.Core.Entities
         public decimal? Refund { get; set; }//non subscribed pay per borrow 70% and minus other fines
         public DateTime? TransactionDate { get; set; } //added at acception also modified at returned
         public decimal? Fine { get; set; }
-        
+        public string? Remarks { get; set; }
+        public string TransactionId { get; set; }
+
+        public Invoice()
+        {
+            TransactionId = GenerateTransactionId();
+        }
+
+        private string GenerateTransactionId()
+        {
+            // You can use a combination of date, time, and a random component
+            string datePart = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string randomPart = Guid.NewGuid().ToString("N").Substring(0, 6); // Generate a random 6-character string
+
+            return datePart + randomPart;
+        }
     }
 }

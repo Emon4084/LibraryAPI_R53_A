@@ -22,7 +22,7 @@ namespace LibraryAPI_R53_A.Persistence
         public DbSet<BorrowedBook> BorrowedBooks { get; set; }
         public DbSet<Category> Categorys { get; set; }
         public DbSet<BookCopy> Copies { get; set; }
-        public DbSet<Fine> Fines { get; set; }
+        //public DbSet<Fine> Fines { get; set; }
         public DbSet<BookFloor> BookFloors { get; set; }
         public DbSet<Inspection> Inspections { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
@@ -103,8 +103,8 @@ namespace LibraryAPI_R53_A.Persistence
             modelBuilder.Entity<BorrowedBook>().HasOne(p => p.Book).WithMany(b => b.BorrowedBooks).HasForeignKey(p => p.BookId);
             modelBuilder.Entity<BorrowedBook>().HasOne(p => p.BookCopy).WithMany(b => b.BorrowBook).HasForeignKey(p => p.BookCopyId);
 
-            //fine
-            modelBuilder.Entity<Fine>().HasOne(p => p.BorrowedBook).WithMany(b => b.Fine).HasForeignKey(p => p.BorrowedBookId);
+            ////fine
+            //modelBuilder.Entity<Fine>().HasOne(p => p.BorrowedBook).WithMany(b => b.Fine).HasForeignKey(p => p.BorrowedBookId);
 
             //Inspection
             modelBuilder.Entity<Inspection>().HasOne(p => p.BookCopy).WithMany(b => b.Inspections).HasForeignKey(p => p.BookCopyId).OnDelete(DeleteBehavior.Restrict);
