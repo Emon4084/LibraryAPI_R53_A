@@ -22,7 +22,7 @@ namespace LibraryAPI_R53_A.Persistence
         public DbSet<BorrowedBook> BorrowedBooks { get; set; }
         public DbSet<Category> Categorys { get; set; }
         public DbSet<BookCopy> Copies { get; set; }
-        public DbSet<Fine> Fines { get; set; }
+        //public DbSet<Fine> Fines { get; set; }
         public DbSet<BookFloor> BookFloors { get; set; }
         public DbSet<Inspection> Inspections { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
@@ -38,6 +38,8 @@ namespace LibraryAPI_R53_A.Persistence
         //public DbSet<ApplicationUser> UserInfos { get; set; }
         public DbSet<UserPreference> UserPreferences { get; set; }
         public DbSet<BookWishlist> BookWishlists { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,7 +70,7 @@ namespace LibraryAPI_R53_A.Persistence
                     .HasForeignKey(e => e.AuthorId);
             });
 
-            // Subscription USEr
+            // Subscription User
             modelBuilder.Entity<SubscriptionUser>()
                 .HasOne(e => e.ApplicationUser)
                  .WithMany(e => e.SubscriptionUsers)
@@ -101,8 +103,8 @@ namespace LibraryAPI_R53_A.Persistence
             modelBuilder.Entity<BorrowedBook>().HasOne(p => p.Book).WithMany(b => b.BorrowedBooks).HasForeignKey(p => p.BookId);
             modelBuilder.Entity<BorrowedBook>().HasOne(p => p.BookCopy).WithMany(b => b.BorrowBook).HasForeignKey(p => p.BookCopyId);
 
-            //fine
-            modelBuilder.Entity<Fine>().HasOne(p => p.BorrowedBook).WithMany(b => b.Fine).HasForeignKey(p => p.BorrowedBookId);
+            ////fine
+            //modelBuilder.Entity<Fine>().HasOne(p => p.BorrowedBook).WithMany(b => b.Fine).HasForeignKey(p => p.BorrowedBookId);
 
             //Inspection
             modelBuilder.Entity<Inspection>().HasOne(p => p.BookCopy).WithMany(b => b.Inspections).HasForeignKey(p => p.BookCopyId).OnDelete(DeleteBehavior.Restrict);
@@ -124,6 +126,10 @@ namespace LibraryAPI_R53_A.Persistence
             modelBuilder.Entity<UserPreference>().HasOne(p => p.Category).WithMany(b => b.UserPreferences).HasForeignKey(p => p.CategoryId);
             modelBuilder.Entity<UserPreference>().HasOne(p => p.Author).WithMany(b => b.UserPreferences).HasForeignKey(p => p.AuthorId);
 
+            //Invoice
+            modelBuilder.Entity<Invoice>().HasOne(i => i.BorrowedBook).WithMany().HasForeignKey(b => b.BorrowId);
+            modelBuilder.Entity<Invoice>().HasOne(i => i.User).WithMany(i=>i.Invoices).HasForeignKey(b => b.UserId);
+            
 
             base.OnModelCreating(modelBuilder);
         }

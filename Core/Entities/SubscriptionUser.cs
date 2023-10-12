@@ -17,5 +17,7 @@ namespace LibraryAPI_R53_A.Core.Entities
         public int SubscriptionPlanId { get; set; }
         [JsonIgnore]
         public SubscriptionPlan? SubscriptionPlan { get; set; }
+        public string? TransactionId { get; set; }
+        public bool? Accepted { get; set; }
     }
 }

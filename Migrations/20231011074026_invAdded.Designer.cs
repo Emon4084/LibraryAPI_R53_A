@@ -4,6 +4,7 @@ using LibraryAPI_R53_A.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI_R53_A.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231011074026_invAdded")]
+    partial class invAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,6 +76,9 @@ namespace LibraryAPI_R53_A.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -417,6 +422,39 @@ namespace LibraryAPI_R53_A.Migrations
                     b.ToTable("Categorys");
                 });
 
+            modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.Fine", b =>
+                {
+                    b.Property<int>("FineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FineId"), 1L, 1);
+
+                    b.Property<int>("BorrowedBookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("FineAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("FineId");
+
+                    b.HasIndex("BorrowedBookId");
+
+                    b.ToTable("Fines");
+                });
+
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.Inspection", b =>
                 {
                     b.Property<int>("InspectionId")
@@ -604,18 +642,11 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Property<decimal?>("Refund")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("SubscriptionPlanId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("TransactionDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -641,17 +672,11 @@ namespace LibraryAPI_R53_A.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptonUserId"), 1L, 1);
 
-                    b.Property<bool?>("Accepted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SubscriptionPlanId")
                         .HasColumnType("int");
-
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubscriptonUserId");
 
@@ -916,6 +941,17 @@ namespace LibraryAPI_R53_A.Migrations
                     b.Navigation("UserInfo");
                 });
 
+            modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.Fine", b =>
+                {
+                    b.HasOne("LibraryAPI_R53_A.Core.Domain.BorrowedBook", "BorrowedBook")
+                        .WithMany("Fine")
+                        .HasForeignKey("BorrowedBookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BorrowedBook");
+                });
+
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.Inspection", b =>
                 {
                     b.HasOne("LibraryAPI_R53_A.Core.Domain.BookCopy", "BookCopy")
@@ -1122,6 +1158,8 @@ namespace LibraryAPI_R53_A.Migrations
 
             modelBuilder.Entity("LibraryAPI_R53_A.Core.Domain.BorrowedBook", b =>
                 {
+                    b.Navigation("Fine");
+
                     b.Navigation("Inspection");
 
                     b.Navigation("Invoices");

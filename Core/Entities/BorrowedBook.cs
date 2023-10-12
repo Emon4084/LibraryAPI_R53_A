@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibraryAPI_R53_A.Core.Entities;
+using System;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -31,7 +32,9 @@ namespace LibraryAPI_R53_A.Core.Domain
         public string? Comment { get; set; } //reason for cancellation
         [JsonIgnore]
         public ICollection<Inspection>? Inspection { get; set; }
+        //[JsonIgnore]
+        //public ICollection<Fine>? Fine { get; set; }
         [JsonIgnore]
-        public ICollection<Fine>? Fine { get; set; }
+        public ICollection<Invoice>? Invoices { get; set; }
     }
 }

@@ -18,11 +18,13 @@ namespace LibraryAPI_R53_A.Controllers
     {
         private readonly IBorrowBook _bR;
         private readonly IBookCopy _bCR;
+        //private readonly IInvoice _inv;
 
-        public BorrowBookController(IBorrowBook bR, IBookCopy bCR)
+        public BorrowBookController(IBorrowBook bR, IBookCopy bCR )//IInvoice inv)
         {
             _bR = bR;
             _bCR = bCR;
+            //_inv = inv;
         }
 
         [Authorize(Roles = "Admin")]
@@ -35,7 +37,7 @@ namespace LibraryAPI_R53_A.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("requested-books/{username}")]
         public async Task<IActionResult> GetRequestedBooksByUserName(string username)
         {
@@ -164,7 +166,17 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
-        
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> BooksShow()
+        {
+            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) { return BadRequest(); }
+            var a = await _bR.GetAllRequestedBooksByUserId(userId);
+            return Ok(a);
+
+        }
+
         [Authorize(Roles ="Admin")]
         [HttpPut("Approve/{borrowedBookId}")]
         public async Task<IActionResult> ApproveBorrowedBook(int borrowedBookId)
@@ -203,6 +215,24 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(borrowedBook);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Return/{borrowedBookId}")]
+        public async Task<IActionResult> ReturnBook(int borrowedBookId)
+        {
+            var borrowedBook = await _bR.Get(borrowedBookId);
+
+            if (borrowedBook == null)
+            {
+                return NotFound();
+            }
+
+          
+            await _bR.ReturnBook(borrowedBook);
+            await _bCR.ChangeAvailability(borrowedBook.BookCopyId, true);
+
+
+            return Ok(borrowedBook);
+        }
 
         //admin inspect, received and fine book
 

@@ -12,6 +12,8 @@ namespace LibraryAPI_R53_A.Core.Interfaces
         Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook);
         Task<BorrowedBook> CancelBorrowedBookAsync(BorrowedBook borrowedBook);
         Task<IEnumerable<BorrowedBook>> GetAllByUserName(string userName);
+        Task<IEnumerable<BorrowedBook>> GetAllRequestedBooksByUserId(string userId);
+        Task<BorrowedBook> ReturnBook(BorrowedBook borrowedBook);
 
 
     }

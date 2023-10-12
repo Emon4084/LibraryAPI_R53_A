@@ -7,5 +7,7 @@
         public string? PlanDescription { get; set; }
         public decimal PlanPrice { get; set; }
         public bool IsActive { get; set; }
+        public decimal? MonthlyFee { get; set; }//new added
+
     }
 }
