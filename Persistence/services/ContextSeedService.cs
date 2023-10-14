@@ -7,7 +7,6 @@ using System.Security.Claims;
 
 namespace LibraryAPI_R53_A.Persistence.services
 {
-    #region Seed Value for role. R-Step 02
     public class ContextSeedService
     {
         private readonly ApplicationDbContext _context;
@@ -26,6 +25,7 @@ namespace LibraryAPI_R53_A.Persistence.services
             {
                 await _context.Database.MigrateAsync();
             }
+            #region Seed Value for role. R-Step 02
 
             if (!_roleManager.Roles.Any())
             {
@@ -92,6 +92,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                     new Claim(ClaimTypes.GivenName, user.UserName)
                 });
             }
+            #endregion
 
             if (!_context.Publishers.Any())
             {
@@ -191,7 +192,23 @@ namespace LibraryAPI_R53_A.Persistence.services
                         PlanDescription = "Can borrow Book that are less than 1000",
                         PlanPrice = 1000.00M,
                         IsActive = true,
-                        MonthlyFee = 200M
+                        MonthlyFee = 100M,
+                    },
+                     new SubscriptionPlan
+                    {
+                        PlanName = "Student Plan",
+                        PlanDescription = "Can borrow Book that are less than 3000",
+                        PlanPrice = 3000.00M,
+                        IsActive = true,
+                        MonthlyFee = 200M,
+                    },
+                      new SubscriptionPlan
+                    {
+                        PlanName = "Premium Plan",
+                        PlanDescription = "Can borrow Book that are less than 5000",
+                        PlanPrice = 5000.00M,
+                        IsActive = true,
+                        MonthlyFee = 300M,
                     }
                 };
                 _context.SubscriptionPlans.AddRange(subscriptionPlans);
@@ -288,10 +305,7 @@ namespace LibraryAPI_R53_A.Persistence.services
             }
 
 
-
-
-            //await _context.SaveChangesAsync();
         }
-        #endregion 
+       
     }
 }
