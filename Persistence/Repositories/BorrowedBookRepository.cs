@@ -78,49 +78,6 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 .ToListAsync();
         }
 
-        //public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
-        //{
-        //    //borrowedBook.BorrowDate = DateTime.Now;
-        //    //borrowedBook.DueDate = DateTime.Now.AddDays(7);
-
-        //    //borrowedBook.Status = "Approved";
-        //    //borrowedBook.Comment = "";
-        //    //borrowedBook.Invoices
-
-
-        //    //await _context.SaveChangesAsync();
-
-        //    return borrowedBook;
-        //}
-        //public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
-        //{
-        //    if (borrowedBook == null)
-        //    {
-        //        throw new InvalidOperationException("BorrowedBook must have a valid value.");
-        //    }
-
-        //    // Update the BorrowedBook properties
-        //    borrowedBook.BorrowDate = DateTime.Now;
-        //    borrowedBook.DueDate = DateTime.Now.AddDays(7);
-        //    borrowedBook.Status = "Approved";
-        //    borrowedBook.Comment = "";
-
-        //    // Create an invoice for the approved book request
-        //    var invoice = new Invoice
-        //    {
-        //        BorrowedBook = borrowedBook,
-        //        UserId = borrowedBook.UserId,
-        //        Payment = borrowedBook?.Book?.BookPrice, // Set payment as the book price
-        //        Refund = borrowedBook?.Book?.BookPrice * 0.7m, // Set refund as 70% of the book price
-        //        TransactionDate = DateTime.Now
-        //    };
-
-        //    // Add the invoice to the context and save changes
-        //    _context.Invoices.Add(invoice);
-        //    await _context.SaveChangesAsync();
-
-        //    return borrowedBook;
-        //}
         public async Task<BorrowedBook> ApproveBorrowedBookAsync(BorrowedBook borrowedBook)
         {
             if (borrowedBook == null)
@@ -128,34 +85,26 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                 throw new InvalidOperationException("BorrowedBook must have a valid value.");
             }
 
-            // Update the BorrowedBook properties
             borrowedBook.BorrowDate = DateTime.Now;
             borrowedBook.DueDate = DateTime.Now.AddDays(7);
             borrowedBook.Status = "Approved";
             borrowedBook.Comment = "";
 
-            // Check if the user has a subscription
-            //bool isSubscribedUser = borrowedBook.UserInfo.IsSubscribed;
 
             var invoice = new Invoice();
+            invoice.BorrowedBook = borrowedBook;
+            invoice.UserId = borrowedBook.UserId;
+            invoice.TransactionDate = DateTime.Now;
+
             if (borrowedBook.UserInfo?.IsSubscribed == true)
             {
-
-                invoice.BorrowedBook = borrowedBook;
-                invoice.UserId = borrowedBook.UserId;
                 invoice.Payment = 0;
                 invoice.Refund = 0;
-                invoice.TransactionDate = DateTime.Now;
-
             }
             else
             {
-
-                invoice.BorrowedBook = borrowedBook;
-                invoice.UserId = borrowedBook.UserId;
                 invoice.Payment = (decimal)borrowedBook.Book.BookPrice;
                 invoice.Refund = borrowedBook?.Book?.BookPrice * 0.7m;
-                invoice.TransactionDate = DateTime.Now;
 
             }
             _context.Invoices.Add(invoice);

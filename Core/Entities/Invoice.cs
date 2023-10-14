@@ -1,4 +1,5 @@
 ﻿using LibraryAPI_R53_A.Core.Domain;
+using System.Text.Json.Serialization;
 
 namespace LibraryAPI_R53_A.Core.Entities
 {
@@ -6,8 +7,10 @@ namespace LibraryAPI_R53_A.Core.Entities
     {
         public int InvoiceId { get; set; }
         public int? BorrowId { get; set; }
+        [JsonIgnore]
         public BorrowedBook? BorrowedBook { get; set; }
         public string? UserId { get; set; } //for monthly fees
+        [JsonIgnore]
         public ApplicationUser? User { get; set; }
         //public int? SubId {get; set; } //if subscribed user
         //public SubscriptionPlan? Plan { get; set; }
