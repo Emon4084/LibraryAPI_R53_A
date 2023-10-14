@@ -1,5 +1,7 @@
-﻿using LibraryAPI_R53_A.Core.Entities;
+﻿using LibraryAPI_R53_A.Core.Domain;
+using LibraryAPI_R53_A.Core.Entities;
 using LibraryAPI_R53_A.Core.Interfaces;
+using LibraryAPI_R53_A.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI_R53_A.Persistence.Repositories
@@ -30,17 +32,9 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return entity;
         }
 
-        //public async Task<Invoice?> ApproveInvoice(Invoice inv,int bId)
-        //{
-        //    inv.BorrowId=bId;
-        //    inv.=;
-        //}
-
         public async Task Put(Invoice entities)
         {
             throw new NotImplementedException();
-            //_context.Invoices.Update(entities);
-            //await _context.SaveChangesAsync();
         }
 
         public IEnumerable<Invoice> Search(string searchString)

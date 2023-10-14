@@ -28,7 +28,7 @@ namespace LibraryAPI_R53_A.Core.Domain
         public Shelf? Shelf { get; set; }
         [JsonIgnore]
         public ICollection<BorrowedBook>? BorrowBook { get; set; }
-        [JsonIgnore]
-        public ICollection<Inspection>? Inspections { get; set; }
+        //[JsonIgnore]
+        //public ICollection<Inspection>? Inspections { get; set; }
     }
 }

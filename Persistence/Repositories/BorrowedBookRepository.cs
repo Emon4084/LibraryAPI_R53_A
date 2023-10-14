@@ -178,7 +178,7 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             return borrowedBook;
         }
 
-        public async Task<BorrowedBook> ReturnBook(BorrowedBook borrowedBook)
+        public async Task<BorrowedBook> ReturnBook(BorrowedBook borrowedBook, string remarks, decimal miscFine)
         {
             borrowedBook.DueDate = borrowedBook.DueDate;
             borrowedBook.ActualReturnDate = DateTime.Now;
@@ -196,45 +196,22 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
             if (invoice != null)
             {
-                if (borrowedBook.UserInfo?.IsSubscribed == true)
-                {
-                    // Subscribed user: Pay only the fine (if available) and update the invoice
-                    if (fineAmount > 0)
-                    {
-                        invoice.Fine = fineAmount;
-                        invoice.Payment = fineAmount;
-                        invoice.TransactionDate= DateTime.Now;
-                    }
-                }
-                else
-                {
-                    
-                    decimal payment = (decimal)borrowedBook.Book.BookPrice; 
-
-                   
-                    decimal refund = payment - fineAmount;
-
-                    // Ensuring refund is non-negative
-                    refund = Math.Max(0, payment*0.7M);
-
-                    invoice.Fine = fineAmount;
-                    invoice.Payment = payment;
-                    invoice.Refund = refund;
-                    invoice.TransactionDate = DateTime.Now;
-                }
-
-                // Save changes to the database
-                await _context.SaveChangesAsync();
+                invoice.Refund = invoice.Refund - (fineAmount + miscFine);
+                invoice.Fine = fineAmount;
+                invoice.TransactionDate = DateTime.Now;
+                invoice.Remarks = remarks;
+                invoice.MiscellaneousFines = miscFine;
             }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
 
             return borrowedBook;
         }
 
         public async Task<BorrowedBook?> Get(int id)
         {
-            var borrowedBook = await _context.BorrowedBooks
-   .Include(b => b.UserInfo)
-   .Include(bb=>bb.Book).FirstOrDefaultAsync(b => b.BorrowedBookId == id);
+            var borrowedBook = await _context.BorrowedBooks.Include(b => b.UserInfo).Include(bb => bb.Book).FirstOrDefaultAsync(b => b.BorrowedBookId == id);
             return borrowedBook;
         }
 

@@ -18,13 +18,13 @@ namespace LibraryAPI_R53_A.Controllers
     {
         private readonly IBorrowBook _bR;
         private readonly IBookCopy _bCR;
-        //private readonly IInvoice _inv;
+        private readonly IInvoice _inv;
 
-        public BorrowBookController(IBorrowBook bR, IBookCopy bCR )//IInvoice inv)
+        public BorrowBookController(IBorrowBook bR, IBookCopy bCR, IInvoice inv)
         {
             _bR = bR;
             _bCR = bCR;
-            //_inv = inv;
+            _inv = inv;
         }
 
         [Authorize(Roles = "Admin")]
@@ -217,7 +217,7 @@ namespace LibraryAPI_R53_A.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("Return/{borrowedBookId}")]
-        public async Task<IActionResult> ReturnBook(int borrowedBookId)
+        public async Task<IActionResult> ReturnBook(int borrowedBookId, string remarks, decimal miscFine )
         {
             var borrowedBook = await _bR.Get(borrowedBookId);
 
@@ -227,9 +227,8 @@ namespace LibraryAPI_R53_A.Controllers
             }
 
           
-            await _bR.ReturnBook(borrowedBook);
+            await _bR.ReturnBook(borrowedBook, remarks, miscFine);
             await _bCR.ChangeAvailability(borrowedBook.BookCopyId, true);
-
 
             return Ok(borrowedBook);
         }
