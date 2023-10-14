@@ -30,8 +30,8 @@ namespace LibraryAPI_R53_A.Core.Domain
         public DateTime? ActualReturnDate { get; set; }
 
         public string? Comment { get; set; } //reason for cancellation
-        [JsonIgnore]
-        public ICollection<Inspection>? Inspection { get; set; }
+        //[JsonIgnore]
+        //public ICollection<Inspection>? Inspection { get; set; }
         //[JsonIgnore]
         //public ICollection<Fine>? Fine { get; set; }
         [JsonIgnore]
