@@ -200,7 +200,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                         PlanDescription = "Can borrow Book that are less than 3000",
                         PlanPrice = 3000.00M,
                         IsActive = true,
-                        MonthlyFee = 200M,
+                        MonthlyFee = 100M,
                     },
                       new SubscriptionPlan
                     {
@@ -208,7 +208,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                         PlanDescription = "Can borrow Book that are less than 5000",
                         PlanPrice = 5000.00M,
                         IsActive = true,
-                        MonthlyFee = 300M,
+                        MonthlyFee = 100M,
                     }
                 };
                 _context.SubscriptionPlans.AddRange(subscriptionPlans);

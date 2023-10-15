@@ -16,7 +16,7 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
         }
         public async Task<IEnumerable<Invoice>> GetAll()
         {
-            return await _context.Invoices.ToListAsync();
+            return await _context.Invoices.Include(i=>i.User).ToListAsync();
         }
         public async Task<Invoice?> Get(int id)
         {

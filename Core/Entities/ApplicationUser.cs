@@ -34,8 +34,3 @@ namespace LibraryAPI_R53_A.Core.Domain
         public ICollection<Invoice>? Invoices { get; set; }
     }
 }
-
-//This will be taken from IdentityUser
-/*public string Name { get; set; }
-public string Password { get; set; }
-public string Email { get; set; }*/
