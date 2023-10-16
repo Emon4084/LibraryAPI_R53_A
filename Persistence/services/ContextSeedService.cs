@@ -40,7 +40,8 @@ namespace LibraryAPI_R53_A.Persistence.services
                 {
                     UserName = SD.AdminUserName,
                     Email = SD.AdminUserName,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    IsActive = true,
                 };
                 await _userManager.CreateAsync(admin, "123456");
                 await _userManager.AddToRolesAsync(admin, new[] { SD.AdminRole, SD.ManagerRole, SD.UserRole });
@@ -54,7 +55,8 @@ namespace LibraryAPI_R53_A.Persistence.services
                 {
                     UserName = "manager",
                     Email = "manager@mail.com",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    IsActive = true,
                 };
                 await _userManager.CreateAsync(manager, "123456");
                 await _userManager.AddToRoleAsync(manager, SD.ManagerRole);
@@ -68,7 +70,8 @@ namespace LibraryAPI_R53_A.Persistence.services
                 {
                     UserName = "user",
                     Email = "user@mail.com",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    IsActive = true,
                 };
                 await _userManager.CreateAsync(user, "123456");
                 await _userManager.AddToRoleAsync(user, SD.UserRole);
@@ -82,7 +85,8 @@ namespace LibraryAPI_R53_A.Persistence.services
                 {
                     UserName = "subscribeUser",
                     Email = "subscribeuser@mail.com",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    IsActive = true,
                 };
                 await _userManager.CreateAsync(subscribeUser, "123456");
                 await _userManager.AddToRoleAsync(subscribeUser, SD.UserRole);
@@ -106,7 +110,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                         Email = "publisher1@example.com",
                         PhoneNumber = "555-123-4567",
                         IsActive = true,
-                    }, 
+                    },
                     new Publisher
                     {
                         PublisherName = "Publisher 2",
@@ -175,7 +179,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                             new Subcategory {DDCCode="823", Name = "English Fiction", IsActive=true }
                         }
                     }
-                    
+
                 };
                 _context.Categorys.AddRange(categories);
                 await _context.SaveChangesAsync();
@@ -189,26 +193,29 @@ namespace LibraryAPI_R53_A.Persistence.services
                     new SubscriptionPlan
                     {
                         PlanName = "Basic Plan",
-                        PlanDescription = "Can borrow Book that are less than 1000",
+                        PlanDescription = "Can borrow Book that are not more than 1000",
                         PlanPrice = 1000.00M,
                         IsActive = true,
                         MonthlyFee = 100M,
+                        MaxAllowedBookPrice = 1000M,
                     },
                      new SubscriptionPlan
                     {
                         PlanName = "Student Plan",
-                        PlanDescription = "Can borrow Book that are less than 3000",
+                        PlanDescription = "Can borrow Book that are not more than 3000",
                         PlanPrice = 3000.00M,
                         IsActive = true,
-                        MonthlyFee = 200M,
+                        MonthlyFee = 100M,
+                        MaxAllowedBookPrice = 3000M,
                     },
                       new SubscriptionPlan
                     {
                         PlanName = "Premium Plan",
-                        PlanDescription = "Can borrow Book that are less than 5000",
+                        PlanDescription = "Can borrow Book that are not more than 5000",
                         PlanPrice = 5000.00M,
                         IsActive = true,
-                        MonthlyFee = 300M,
+                        MonthlyFee = 100M,
+                        MaxAllowedBookPrice = 5000M,
                     }
                 };
                 _context.SubscriptionPlans.AddRange(subscriptionPlans);
@@ -306,6 +313,6 @@ namespace LibraryAPI_R53_A.Persistence.services
 
 
         }
-       
+
     }
 }

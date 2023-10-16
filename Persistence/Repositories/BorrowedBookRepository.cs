@@ -17,13 +17,6 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<BorrowedBook?> Post(BorrowedBook borrowedBook)
-        {
-            _context.BorrowedBooks.Add(borrowedBook);
-            await _context.SaveChangesAsync();
-            return borrowedBook;
-        }
-
         public async Task<IEnumerable<BorrowedBook>> GetAllRequestedBooksByUserName(string userName)
         {
             return await _context.BorrowedBooks
@@ -145,26 +138,122 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
 
             if (invoice != null)
             {
-                invoice.Refund = invoice.Refund - (fineAmount + miscFine);
-                invoice.Fine = fineAmount;
-                invoice.TransactionDate = DateTime.Now;
-                invoice.Remarks = remarks;
-                invoice.MiscellaneousFines = miscFine;
+                if (borrowedBook.UserInfo?.IsSubscribed == true)
+                {
+                    invoice.Payment = (fineAmount + miscFine);
+                    invoice.Fine = fineAmount;
+                    invoice.TransactionDate = DateTime.Now;
+                    invoice.Remarks = remarks;
+                    invoice.MiscellaneousFines = miscFine;
+                }
+                else
+                {
+
+
+                    invoice.Refund -= (fineAmount + miscFine);
+
+                    //payment after retuning will be changed to new payment = payment - refund
+                    invoice.Payment = invoice.Payment - invoice.Refund;
+
+                    invoice.Fine = fineAmount;
+                    invoice.TransactionDate = DateTime.Now;
+                    invoice.Remarks = remarks;
+                    invoice.MiscellaneousFines = miscFine;
+                }
             }
+            // without checking user subs
+            //if (invoice != null)
+            //{
+            //    invoice.Refund = invoice.Refund - (fineAmount + miscFine);
+            //    invoice.Fine = fineAmount;
+            //    invoice.TransactionDate = DateTime.Now;
+            //    invoice.Remarks = remarks;
+            //    invoice.MiscellaneousFines = miscFine;
+            //}
 
             // Save changes to the database
             await _context.SaveChangesAsync();
 
             return borrowedBook;
         }
-
+        
         public async Task<BorrowedBook?> Get(int id)
         {
             var borrowedBook = await _context.BorrowedBooks.Include(b => b.UserInfo).Include(bb => bb.Book).FirstOrDefaultAsync(b => b.BorrowedBookId == id);
             return borrowedBook;
         }
 
+        /// <summary>
+        /// send request based on subs plan taken
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="borrowedBook"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> SendBookRequest(string userId, BorrowedBook borrowedBook)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
+            if (user == null)
+            {
+                return new NotFoundObjectResult("User not found.");
+            }
+
+            var userSubscriptionPlan = await _context.SubscriptionUsers
+                .Where(su => su.ApplicationUserId == user.Id)
+                .Select(su => su.SubscriptionPlan)
+                .FirstOrDefaultAsync();
+
+            decimal maxAllowedBookPrice = userSubscriptionPlan?.MaxAllowedBookPrice ?? 500; // Default to 500 if no subscription plan
+
+            var availableBookCopies = await _context.Copies
+                .Where(bc => bc.BookId == borrowedBook.BookId && bc.IsAvailable)
+                .FirstOrDefaultAsync();
+
+            if (availableBookCopies == null)
+            {
+                return new BadRequestObjectResult("All copies are currently borrowed.");
+            }
+
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.BookId == borrowedBook.BookId);
+
+            if (book == null)
+            {
+                return new NotFoundObjectResult("Book not found.");
+            }
+
+            if (book.BookPrice > maxAllowedBookPrice)
+            {
+                return new BadRequestObjectResult("User's subscription plan does not allow borrowing this book.");
+            }
+
+            borrowedBook.UserId = userId;
+            borrowedBook.BookCopyId = availableBookCopies.BookCopyId;
+            borrowedBook.RequestTimestamp = DateTime.Now;
+            borrowedBook.Status = "Requested";
+            borrowedBook.IsActive = true;
+            borrowedBook.DueDate = null;
+            borrowedBook.ActualReturnDate = null;
+            borrowedBook.Comment = "";
+            borrowedBook.BorrowDate = null;
+
+            _context.BorrowedBooks.Add(borrowedBook);
+            availableBookCopies.IsAvailable = false;
+
+            await _context.SaveChangesAsync();
+
+            return new OkObjectResult("Successfully Requested");
+
+        }
+
+
+
+        public Task<BorrowedBook?> Post(BorrowedBook borrowedBook)
+        {
+            //_context.BorrowedBooks.Add(borrowedBook);
+            //await _context.SaveChangesAsync();
+            //return borrowedBook;
+            throw new NotImplementedException();
+        }
 
 
         public Task Delete(int id)

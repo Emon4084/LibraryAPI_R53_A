@@ -117,54 +117,67 @@ namespace LibraryAPI_R53_A.Controllers
             }
         }
 
-
-
-
         [Authorize(Roles = "Admin, User")]
         [HttpPost("book-request")]
         public async Task<IActionResult> SendBookRequest(BorrowedBook borrowedBook)
         {
-            try
+            var uId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(uId))
             {
-                var uId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                if (string.IsNullOrEmpty(uId))
-                {
-                    return Unauthorized("User not authenticated.");
-                }
-
-                var availablebookCopies = await _bCR.GetAvailable(borrowedBook.BookId);
-
-                if (availablebookCopies == null)
-                {
-                    return BadRequest("All Copies are currently borrowed.");
-                }
-
-
-                borrowedBook = new BorrowedBook
-                {
-                    UserId = uId,
-                    BookId = borrowedBook.BookId,
-                    BookCopyId = availablebookCopies.BookCopyId,
-                    RequestTimestamp= DateTime.Now,
-                    Status = "Requested",
-                    IsActive = true
-
-                };
-
-                await _bR.Post(borrowedBook);
-                await _bCR.ChangeAvailability(availablebookCopies.BookCopyId, false);
-
-
-                return Ok("Succesfully Requested");
-
-
+                return Unauthorized("User not authenticated.");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
-            }
+
+            return await _bR.SendBookRequest(uId, borrowedBook);
         }
+
+
+
+        //[Authorize(Roles = "Admin, User")]
+        //[HttpPost("book-request")]
+        //public async Task<IActionResult> SendBookRequest(BorrowedBook borrowedBook)
+        //{
+        //    try
+        //    {
+        //        var uId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //        if (string.IsNullOrEmpty(uId))
+        //        {
+        //            return Unauthorized("User not authenticated.");
+        //        }
+
+        //        var availablebookCopies = await _bCR.GetAvailable(borrowedBook.BookId);
+
+        //        if (availablebookCopies == null)
+        //        {
+        //            return BadRequest("All Copies are currently borrowed.");
+        //        }
+
+
+        //        borrowedBook = new BorrowedBook
+        //        {
+        //            UserId = uId,
+        //            BookId = borrowedBook.BookId,
+        //            BookCopyId = availablebookCopies.BookCopyId,
+        //            RequestTimestamp= DateTime.Now,
+        //            Status = "Requested",
+        //            IsActive = true
+
+        //        };
+
+        //        await _bR.Post(borrowedBook);
+        //        await _bCR.ChangeAvailability(availablebookCopies.BookCopyId, false);
+
+
+        //        return Ok("Succesfully Requested");
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        //    }
+        //}
 
         [Authorize]
         [HttpGet]
