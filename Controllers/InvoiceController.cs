@@ -31,6 +31,11 @@ namespace LibraryAPI_R53_A.Controllers
         [HttpPost]
         public async Task<ActionResult<Invoice>>Post(Invoice inv)
         {
+            inv.TransactionDate = DateTime.Now;
+            inv.BorrowId = null;
+            inv.Fine = null;
+            inv.MiscellaneousFines = null;
+            inv.Refund = null;
             await _inv.Post(inv);
             return Ok(inv);
         }
