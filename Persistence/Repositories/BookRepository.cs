@@ -63,6 +63,32 @@ namespace LibraryAPI_R53_A.Persistence.Repositories
                             select b;
             return book.ToList();
         }
+
+        public IEnumerable<Book> SearchByAuthor(int aId)
+        {
+            var book = _context.Books.
+                Where(b => b.BookAuthor.Any(a => a.AuthorId == aId)).
+                ToList();
+            return book;
+        }
+        public IEnumerable<Book> SearchByPublisher(int pId)
+        {
+            var book = from b in _context.Books
+                       where b.PublisherId == pId
+                            select b;
+            return book.ToList();
+        }
+        public IEnumerable<Book> SearchByCategory(int cId)
+        {
+            var book = from b in _context.Books
+                            where b.CategoryId == cId
+                            select b;
+            return book.ToList();
+        }
+
+
+
+
         public IEnumerable<Book> GetActive()
         {
             var book = from b in _context.Books
