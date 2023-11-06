@@ -8,6 +8,9 @@ namespace LibraryAPI_R53_A.Core.Interfaces
         public Task<Book?> GetByISBN(string isbn);
         Task UpdateBookAuthors(Book book, IEnumerable<int> authorIds);
         Task RemoveAuthorsFromBook(int bookId, IEnumerable<int> authorIdsToRemove);
+        IEnumerable<Book> SearchByPublisher(int pId);
+        IEnumerable<Book> SearchByCategory(int cId);
+        IEnumerable<Book> SearchByAuthor(int aId);
 
     }
 }

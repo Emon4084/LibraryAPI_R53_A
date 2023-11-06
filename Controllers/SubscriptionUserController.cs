@@ -62,6 +62,11 @@ namespace LibraryAPI_R53_A.Controllers
                     Accepted = null // Not accepted yet
                 };
 
+                //var invoice = new Invoice
+                //{ 
+                    
+                //};
+
                 await _subscriptionUserRepository.AddRequest(subscriptionUser);
                 return Ok("Request sent successfully.");
             }

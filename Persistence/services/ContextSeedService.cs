@@ -259,9 +259,9 @@ namespace LibraryAPI_R53_A.Persistence.services
                         Edition = "1st Edition",
                         TotalCopies = 2,
                         Language = "English",
-                        Description = "The Adventures of Sherlock Holmes is a collection of twelve short        stories " +
-                                      "featuring Sherlock Holmes, a fictional detective. The stories are     the " +
-                                      "first appearance of Holmes in book form and are widely considered        some of " +
+                        Description = "Author: John Doe " + " The Adventures of Sherlock Holmes is a collection of twelve short stories " +
+                                      "featuring Sherlock Holmes, a fictional detective. The stories are the " +
+                                      "first appearance of Holmes in book form and are widely considered some of " +
                                       "the finest short stories in the mystery genre.",
                         BookPrice = 700.00M,
                         DDCCode = "Fiction(823.8)",
@@ -270,6 +270,7 @@ namespace LibraryAPI_R53_A.Persistence.services
                         PublisherAgreement = false,
                         CategoryId = 1,
                         CoverFileName="http://localhost:5154/uploads/45b6a6a6-22a2-44f0-b346-c116ca126dd9_The_AdventureOf_SherlockHolmes.jpg",
+                         //CoverFileName="http://10.0.2.2:5154/uploads/45b6a6a6-22a2-44f0-b346-c116ca126dd9_The_AdventureOf_SherlockHolmes.jpg",
                         BookAuthor = new List<BookAuthor>
                         {
                             new BookAuthor { AuthorId =1}
