@@ -161,6 +161,26 @@ namespace LibraryAPI_R53_A.Controllers
             return Ok(book);
         }
 
+        [HttpGet, Route("SearchBookByAuthor/{id}")]
+        public IActionResult SearchBookByAuthor(int id)
+        {
+            var book = _b.SearchByAuthor(id);
+            return Ok(book);
+        }
+        [HttpGet, Route("SearchBookByCategory/{id}")]
+        public IActionResult SearchBookByCategory(int id)
+        {
+            var book = _b.SearchByCategory(id);
+            return Ok(book);
+        }
+
+        [HttpGet, Route("SearchBookByPublisher/{id}")]
+        public IActionResult SearchBookByPublisher(int id)
+        {
+            var book = _b.SearchByPublisher(id);
+            return Ok(book);
+        }
+
         [HttpGet, Route("GetActiveBook")]
         public IActionResult GetActiveBook()
         {
